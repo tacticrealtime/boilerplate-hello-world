@@ -1,0 +1,29 @@
+{
+  "type": "MANIFEST",
+  "version": "1.0",
+  "author": "Anton Gorodnyanskiy",
+  "brand": "TACTIC",
+  "name": "Boilerplate",
+  "created": "08/11/2017",
+  "updated": "08/11/2017",
+  "editor": {
+    "url": "editor.html",
+    "version": "1.1"
+  },
+  "sizes": [
+    {
+      "type": "STATIC",
+      "name": "300x250",
+      "width": 300,
+      "height": 250,
+      "index": "300x250/index.html",
+      "fallback": {
+        "static": "300x250/fallback.png"
+      }
+    }
+  ],
+  "data": {
+    "clicktag": "http://www.tacticrealtime.com/",
+    "message": "Hello, World!"
+  }
+}
