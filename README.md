@@ -23,14 +23,8 @@ You are free to use any kind of file structure within the package. Below is the 
 | manifest.json | Describes package structure and indicates file relations. It also includes default data for the content editor. |
 | preview.html | Emulates application's content editor environment with banner preview on the side. |
 | tactic.js | Core script that load creative bundle, advert data and media adapter. This script is added automatically while running creative locally with preview.html or when creative package is uploaded to application. |
-| emulator.js | Script emulates tactic.js if banner is accessed locally without local boilerplate environment (preview.html). |
-| scripts/launcher.js | Creative launcher script. Script loads feeds, waits for font initialisation and parses creative data before compiling creative instance. |
-| scripts/creative.js | Creative initialisation script. Script compiles creative, sets event binders, tacking points and user interaction logic. |
-| styles/style.css | CSS styles that are common to all banner sizes. |
-| styles/fonts.css | Font related CSS styles. |
 | 300x250/index.html | Banner size wrapper that combines scripts, HTML and CSS. |
 | 300x250/fallback.png | Static banner size fallback image. |
-| assets/ | Store creative assets like logotype, fonts and/or any kind of other static assets to be used in the banner. |
 JavaScript "tactic" namespace with container external methods is always available in the banner. Use it to open click tags, track events or perform any other ad network related actions without thinking about media networks API differences.
 
 ## Technologies
