@@ -274,8 +274,86 @@ var
 	data = 'Hello World!';
 
 // Inject text DOM.
-tactic.utilities.placeText(text, data, text.offsetWidth, text.offsetHeight, function(target, source, scale) {
-    // Do something on text append complete event.
+tactic.utilities.placeText(text, data, text.offsetWidth, text.offsetHeight, function (target, source, scale) {
+	// Do something on text append complete event.
+});
+```
+#### tactic.utilities.placeImage(target : Element, data : Object, [width: Number], [height: Number], [callback: Function]) : Element
+Inject video into creative's DOM element.
+``` js
+var
+	/**
+	 * Find image container in DOM.
+	 * @type {Element}
+	 */
+	image = document.getElementById('myImage'),
+	/**
+	 * Define image data.
+	 * @type {Object}
+	 */
+	data  = {
+		/**
+		 * @type {Object}
+		 */
+		params:  {
+			/**
+			 * Identify cropping settings in percent from edges (top, right, bottom, left).
+			 * @type {Array}
+			 */
+			crop:       [
+				0,
+				0.2,
+				0,
+				0.2
+			],
+			/**
+			 * Identify alignment settings.
+			 * @type {Array}
+			 */
+			align:      [
+				/**
+				 * Possbile values: 'left', 'center', 'right'.
+				 * @type {String}
+				 */
+				'center',
+				/**
+				 * Possbile values: 'top', 'middle', 'bottom'.
+				 * @type {String}
+				 */
+				'middle'
+			],
+			/**
+			 * Identify if image has to fill or fit container.
+			 * Possbile values:  'fill', 'fit'.
+			 * @type {String}
+			 */
+			'scale':    'fill',
+			/**
+			 * Identify if image has to be loaded politely.
+			 * @type {Boolean}
+			 */
+			'polite':   true
+		},
+		/**
+		 * @type {Array}
+		 */
+		sources: [
+			{
+				width:  640,
+				height: 427,
+				url:    'http://crv-res.trtm.io/samples/images/table-laptop-coffee-640.jpg'
+			},
+			{
+				width:  320,
+				height: 214,
+				url:    'http://crv-res.trtm.io/samples/images/table-laptop-coffee-320.jpg'
+			}
+		]
+	};
+
+// Inject image to DOM.
+tactic.utilities.placeImage(image, data, image.offsetWidth, image.offsetHeight, function (target, source, scale) {
+	// Do something on image load complete event.
 });
 ```
 #### tactic.utilities.placeVideo(target : Element, data : Object, [width: Number], [height: Number], [callback: Function]) : Element
@@ -291,104 +369,104 @@ var
 	 * Define video data.
 	 * @type {Object}
 	 */
-	data = {
-	    /**
+	data  = {
+		/**
 		 * @type {Object}
 		 */
-		params: {
-    		/**
-    		 * Identify cropping settings in percent from edges (top, right, bottom, left).
-    		 * @type {Array}
-    		 */
-    		crop: [
-              0,
-              0.2,
-              0,
-              0.2
-            ],
-    		/**
-    		 * Identify alignment settings.
-    		 * @type {Array}
-    		 */
-            align: [
-    	    	/**
-    	    	 * Possbile values: 'left', 'center', 'right'.
-    	    	 * @type {String}
-    	    	 */
-              'center',
-    	    	/**
-    	    	 * Possbile values: 'top', 'middle', 'bottom'.
-    	    	 * @type {String}
-    	    	 */
-              'middle'
-            ],
-    		/**
-    		 * Identify if image has to fill or fit container.
-    		 * Possbile values:  'fill', 'fit'.
-    		 * @type {String}
-    		 */
-            'scale': 'fill',
-    		/**
-    		 * Identify if image has to be loaded politely.
-    		 * @type {Boolean}
-    		 */
-            'polite': true,
-    		/**
-    		 * Define if video controls have to be displayed.
-    		 * @type {Boolean}
-    		 */
-            'controls': true,
-    		/**
-    		 * Define preload mode.
-    		 * @type {String}
-    		 */
-            'preload': 'metadata',
-    		/**
-    		 * Identify if video has to be played inline.
-    		 * @type {Boolean}
-    		 */
-            'inline': true,
-    		/**
-    		 * Identify if video has to be played automatically.
-    		 * @type {Boolean}
-    		 */
-            'autoplay': true,
-    		/**
-    		 * Identify if video will proceed playing after it ends.
-    		 * @type {Boolean}
-    		 */
-            'loop': true,
-    		/**
-    		 * Define video volume.
-    		 * @type {Number}
-    		 */
-            'volume': 0.6,
-    		/**
-    		 * Identify if video has to be muted.
-    		 * @type {Boolean}
-    		 */
-            'muted': true
+		params:  {
+			/**
+			 * Identify cropping settings in percent from edges (top, right, bottom, left).
+			 * @type {Array}
+			 */
+			crop:       [
+				0,
+				0.2,
+				0,
+				0.2
+			],
+			/**
+			 * Identify alignment settings.
+			 * @type {Array}
+			 */
+			align:      [
+				/**
+				 * Possbile values: 'left', 'center', 'right'.
+				 * @type {String}
+				 */
+				'center',
+				/**
+				 * Possbile values: 'top', 'middle', 'bottom'.
+				 * @type {String}
+				 */
+				'middle'
+			],
+			/**
+			 * Identify if image has to fill or fit container.
+			 * Possbile values:  'fill', 'fit'.
+			 * @type {String}
+			 */
+			'scale':    'fill',
+			/**
+			 * Identify if image has to be loaded politely.
+			 * @type {Boolean}
+			 */
+			'polite':   true,
+			/**
+			 * Define if video controls have to be displayed.
+			 * @type {Boolean}
+			 */
+			'controls': true,
+			/**
+			 * Define preload mode.
+			 * @type {String}
+			 */
+			'preload':  'metadata',
+			/**
+			 * Identify if video has to be played inline.
+			 * @type {Boolean}
+			 */
+			'inline':   true,
+			/**
+			 * Identify if video has to be played automatically.
+			 * @type {Boolean}
+			 */
+			'autoplay': true,
+			/**
+			 * Identify if video will proceed playing after it ends.
+			 * @type {Boolean}
+			 */
+			'loop':     true,
+			/**
+			 * Define video volume.
+			 * @type {Number}
+			 */
+			'volume':   0.6,
+			/**
+			 * Identify if video has to be muted.
+			 * @type {Boolean}
+			 */
+			'muted':    true
 		},
 		/**
 		 * @type {Array}
 		 */
 		sources: [
-		    {
-	            width: 640,
-                height: 360,
-                url: 'http://crv-res.trtm.io/samples/videos/bbb-640.mp4'
-		    },
-		    {
-	            width: 320,
-                height: 180,
-                url: 'http://crv-res.trtm.io/samples/videos/bbb-320.mp4'
-		    }
+			{
+				width:  640,
+				height: 360,
+				url:    'http://crv-res.trtm.io/samples/videos/bbb-640.mp4'
+			},
+			{
+				width:  320,
+				height: 180,
+				url:    'http://crv-res.trtm.io/samples/videos/bbb-320.mp4'
+			}
 		]
 	};
 
 // Inject video to DOM.
-tactic.utilities.placeVideo(video, data, video.offsetWidth, video.offsetHeight, function(target, source, scale) {
-    // Do something on video load complete event.
+tactic.utilities.placeVideo(video, data, video.offsetWidth, video.offsetHeight, function (target, source, scale) {
+	// Do something on video load complete event.
 });
 ```
 #### tactic.utilities.watchFont(className : String, callback: Function, [timeout : Number]) : void
