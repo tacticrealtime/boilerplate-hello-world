@@ -156,8 +156,8 @@ Use `image-picker` tag to give user ability to define image data. You are able t
 ``` html
 <block-field title="My Image">
     <image-picker model="$data.image"
-    	settings="{'defaults': {'params': {'scale': 'fill', 'polite': true}}, 'cropping': { 'ratios': {'300x250': {'label': '300x250', 'value': '300x250'}}}}"
-		no-crop="false" no-align="false" no-cover="false" no-load="false"></image-picker>
+			settings="{'defaults': {'params': {'scale': 'fill', 'polite': true}}, 'cropping': { 'ratios': {'300x250': {'label': '300x250', 'value': '300x250'}}}}"
+			no-crop="false" no-align="false" no-cover="false" no-load="false"></image-picker>
 </block-field>
 ```
 #### Video Picker
@@ -165,9 +165,9 @@ Use `video-picker` tag to give user ability to define video data. You are able t
 ``` html
 <block-field title="My Video">
     <image-picker model="$data.video"
-        settings="{'defaults': {'params': {'scale': 'fill', 'polite': true, 'mute': true, 'controls': false, 'autoplay': true}}, 'cropping': { 'ratios': {'300x250': {'label': '300x250', 'value': '300x250'}}}}"
-    	no-crop="false" no-align="false" no-cover="false" no-load="false"
-    	no-autoplay="true" no-controls="true" no-mute="true"></image-picker>
+			settings="{'defaults': {'params': {'scale': 'fill', 'polite': true, 'mute': true, 'controls': false, 'autoplay': true}}, 'cropping': { 'ratios': {'300x250': {'label': '300x250', 'value': '300x250'}}}}"
+			no-crop="false" no-align="false" no-cover="false" no-load="false"
+			no-autoplay="true" no-controls="true" no-mute="true"></image-picker>
 </block-field>
 ```
 #### Color Picker
