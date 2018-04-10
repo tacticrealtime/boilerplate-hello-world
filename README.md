@@ -16,8 +16,9 @@ After you are done with your dynamic creative, upload it to TACTIC™ Applicatio
 
 ## Structure
 You are free to use any kind of file structure within the package. Below is the description of various components for this particular Boilerplate package:
-| File | Description |
-| ------ | ------ |
+
+|    File    |   Description  |
+|------------|----------------|
 | editor.html | Creative content editor structure. |
 | manifest.json | Describes package structure and indicates file relations. Includes default create data. |
 | preview.html | Emulates application's content editor environment with banner preview on the side. |
@@ -33,7 +34,7 @@ You are free to use any kind of file structure within the package. Below is the 
 
 ## Installation
 Boilerplate requires a local server to run. To install local server:
-```sh
+``` sh
 sudo npm i -g http-server && ./serve.sh
 ```
 To verify the deployment, navigate to your server address in your preferred browser:
@@ -43,7 +44,7 @@ http://127.0.0.1:8000/
 
 ## Validation
 For running validation of creative run the following command:
-```
+``` sh
 npm run validate
 ```
 
@@ -60,7 +61,7 @@ For detailed description of validation errors please see [this page](https://git
 
 ## Packaging
 For packaging your creative into .zip file before uploading to Tactic run the following command:
-```
+``` sh
 npm run zip
 ```
 
@@ -183,12 +184,14 @@ JavaScript `tactic` namespace with container external methods is always availabl
 ``` js
 // Wait for TACTIC Container initialisation ready state.
 tactic.container.ready(function (data) {
+
     var
 		/**
 		 * Initialise your creative object as soon as you get data.
 		 * @type {Creative}
 		 */
 		creative = new YourCreativeInitialiser(data);
+
 });
 ```
 #### tactic.container.clickThrough(url : String, [vars : Object], [params : Object]) : String
