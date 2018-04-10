@@ -24,6 +24,7 @@
   ],
   "data": {
     "clicktag": "http://www.tacticrealtime.com/",
-    "message": "Hello, World!"
+    "text": "Hello, World!",
+    "image": null
   }
 }

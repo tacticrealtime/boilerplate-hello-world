@@ -12,9 +12,10 @@
 		}
 
 		body, html {
-			width:  300px;
-			height: 250px;
-			cursor: pointer;
+			width:      300px;
+			height:     250px;
+			cursor:     pointer;
+			background: #ccc;
 		}
 
 		.table, .cell {
@@ -25,8 +26,7 @@
 		}
 
 		.table {
-			display:    table;
-			background: #ccc;
+			display: table;
 		}
 
 		.cell {
@@ -34,7 +34,18 @@
 		}
 
 		p {
-			font-size: 24px;
+			font-size: 36px;
+		}
+
+		.background,
+		.message {
+			position: absolute;
+			width:    100%;
+			height:   100%;
+		}
+
+		.background {
+			background-size: cover;
 		}
 
 	</style>
@@ -50,17 +61,31 @@
 		 * @typedef {Function} tactic.container.clickThrough
 		 */
 
-		tactic.container.ready(function (data) {
+		/**
+		 * @namespace tactic.url
+		 */
 
-			document.getElementById('message').innerHTML = data['message'].split('\n').join('</br>');
+		/**
+		 * @typedef {Function} tactic.url.sanitize
+		 */
+
+		tactic.container.ready(function (data) {
 
 			document.body.onclick = function () {
 
 				tactic.container.clickThrough(data['clicktag'], {
-					'utm_content': data['message']
+					'utm_source':  'display',
+					'utm_content': data['text']
 				});
 
 			};
+
+			document.getElementById('text').innerHTML = data['text'].split('\n').join('</br>');
+
+			if (data.image) {
+				document.getElementById('image').style.backgroundImage
+					= 'url(' + tactic.url.sanitize(data['image']['sources'][0]['url']) + ')';
+			}
 
 		});
 
@@ -69,11 +94,17 @@
 </head>
 <body>
 
-<div class="table">
+<div class="background" id="image"></div>
 
-	<div class="cell">
+<div class="message">
 
-		<p id="message"></p>
+	<div class="table">
+
+		<div class="cell">
+
+			<p id="text"></p>
+
+		</div>
 
 	</div>
 
