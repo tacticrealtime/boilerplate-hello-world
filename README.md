@@ -195,27 +195,33 @@ tactic.container.ready(function (data) {
 Open specific destination with additional parameters. Ad netwrok click tag URL (tracker) will be merged with requested URL automatically.
 ``` js
 tactic.container.clickThrough('https://www.yourdestination.com/', {
+
     /**
 	 * Indicate URL variables to be added to destination URL.
 	 * @type {String}
 	*/
     utm_campaign: 'campaignName'
+
 }, {
+
     /**
 	 * Indicate window target.
 	 * @type {String}
 	*/
 	target: '_blank',
+
 	/**
 	 * Indicate if URL variables have to be encoded. Default value is 'false'.
 	 * @type {Boolean}
 	 */
 	encode: true,
+
 	/**
 	 * Indicate if requested URL variables have to be merged with initial network variables. Default value is 'true'.
 	 * @type {Boolean}
 	 */
 	merge: true
+
 });
 ```
 Open initial ad network click tag.
@@ -262,11 +268,13 @@ We provide a set of utilities that you are able to use to ease development of yo
 Inject text into creative's DOM element. Method will automatically resize text if it doesn't fit container bounds.
 ``` js
 var
+
 	/**
 	 * Find text container in DOM.
 	 * @type {Element}
 	 */
 	text = document.getElementById('myText'),
+
 	/**
 	 * Define image data.
 	 * @type {Object}
@@ -282,20 +290,24 @@ tactic.utilities.placeText(text, data, text.offsetWidth, text.offsetHeight, func
 Inject video into creative's DOM element.
 ``` js
 var
+
 	/**
 	 * Find image container in DOM.
 	 * @type {Element}
 	 */
 	image = document.getElementById('myImage'),
+
 	/**
 	 * Define image data.
 	 * @type {Object}
 	 */
 	data  = {
+
 		/**
 		 * @type {Object}
 		 */
 		params:  {
+
 			/**
 			 * Identify cropping settings in percent from edges (top, right, bottom, left).
 			 * @type {Array}
@@ -306,34 +318,42 @@ var
 				0,
 				0.2
 			],
+
 			/**
 			 * Identify alignment settings.
 			 * @type {Array}
 			 */
 			align:      [
+
 				/**
 				 * Possbile values: 'left', 'center', 'right'.
 				 * @type {String}
 				 */
 				'center',
+
 				/**
 				 * Possbile values: 'top', 'middle', 'bottom'.
 				 * @type {String}
 				 */
 				'middle'
+
 			],
+
 			/**
 			 * Identify if image has to fill or fit container.
 			 * Possbile values:  'fill', 'fit'.
 			 * @type {String}
 			 */
 			'scale':    'fill',
+
 			/**
 			 * Identify if image has to be loaded politely.
 			 * @type {Boolean}
 			 */
 			'polite':   true
+
 		},
+
 		/**
 		 * @type {Array}
 		 */
@@ -349,6 +369,7 @@ var
 				url:    'http://crv-res.trtm.io/samples/images/table-laptop-coffee-320.jpg'
 			}
 		]
+
 	};
 
 // Inject image to DOM.
@@ -360,20 +381,24 @@ tactic.utilities.placeImage(image, data, image.offsetWidth, image.offsetHeight, 
 Inject video into creative's DOM element.
 ``` js
 var
+
 	/**
 	 * Find video container in DOM.
 	 * @type {Element}
 	 */
 	video = document.getElementById('myVideo'),
+
 	/**
 	 * Define video data.
 	 * @type {Object}
 	 */
 	data  = {
+
 		/**
 		 * @type {Object}
 		 */
 		params:  {
+
 			/**
 			 * Identify cropping settings in percent from edges (top, right, bottom, left).
 			 * @type {Array}
@@ -384,69 +409,84 @@ var
 				0,
 				0.2
 			],
+
 			/**
 			 * Identify alignment settings.
 			 * @type {Array}
 			 */
 			align:      [
+
 				/**
 				 * Possbile values: 'left', 'center', 'right'.
 				 * @type {String}
 				 */
 				'center',
+
 				/**
 				 * Possbile values: 'top', 'middle', 'bottom'.
 				 * @type {String}
 				 */
 				'middle'
+
 			],
+
 			/**
 			 * Identify if image has to fill or fit container.
 			 * Possbile values:  'fill', 'fit'.
 			 * @type {String}
 			 */
 			'scale':    'fill',
+
 			/**
 			 * Identify if image has to be loaded politely.
 			 * @type {Boolean}
 			 */
 			'polite':   true,
+
 			/**
 			 * Define if video controls have to be displayed.
 			 * @type {Boolean}
 			 */
 			'controls': true,
+
 			/**
 			 * Define preload mode.
 			 * @type {String}
 			 */
 			'preload':  'metadata',
+
 			/**
 			 * Identify if video has to be played inline.
 			 * @type {Boolean}
 			 */
 			'inline':   true,
+
 			/**
 			 * Identify if video has to be played automatically.
 			 * @type {Boolean}
 			 */
 			'autoplay': true,
+
 			/**
 			 * Identify if video will proceed playing after it ends.
 			 * @type {Boolean}
 			 */
 			'loop':     true,
+
 			/**
 			 * Define video volume.
 			 * @type {Number}
 			 */
 			'volume':   0.6,
+
 			/**
 			 * Identify if video has to be muted.
 			 * @type {Boolean}
 			 */
 			'muted':    true
+
 		},
+
 		/**
 		 * @type {Array}
 		 */
@@ -462,6 +502,7 @@ var
 				url:    'http://crv-res.trtm.io/samples/videos/bbb-320.mp4'
 			}
 		]
+
 	};
 
 // Inject video to DOM.
