@@ -21,26 +21,22 @@ You are free to use any kind of file structure within the package. Below is the 
 |------------|----------------|
 | editor.html | Creative content editor structure. |
 | manifest.json | Describes package structure and indicates file relations. Includes default create data. |
-| preview.html | Emulates application's content editor environment with banner preview on the side. |
-| tactic.js | TACTIC™ JS library. Script loads creative bundle, advert data and network adapter. This script is included automatically while running creative locally with preview.html or when creative package is uploaded to application. |
-| emulator.js | Script emulates tactic.js if banner is accessed locally without local boilerplate environment. |
-| scripts/utilities.js | Creative utilities. Help to place text, images and video into banner DOM. |
-| scripts/creative.js | Creative initialisation script. Script loads feeds, waits for font initialisation and parses creative data before compiling creative instance. Script compiles creative, sets event binders, tacking points and user interaction logic. |
-| styles/style.css | CSS styles that are common to all banner sizes. |
-| styles/fonts.css | Font related CSS styles. |
+| index.html | Emulates application's content editor environment with banner preview on the side. |
+| tactic.js | TACTIC™ JS library. Script loads creative bundle, advert data and network adapter. This script is included automatically while running creative locally with index.html or when creative package is uploaded to application. |
 | 300x250/index.html | Banner size wrapper that combines scripts, HTML and CSS. |
 | 300x250/fallback.png | Static fallback image. |
-| assets/ | Folder to store creative assets like logotype, fonts and/ or any kind of other static assets to be used in the banner. |
 
 ## Installation
-Boilerplate requires a local server to run. To install local server:
+First of all, install necessary development dependencies by running
 ``` sh
-sudo npm i -g http-server && ./serve.sh
+npm install
 ```
-To verify the deployment, navigate to your server address in your preferred browser:
+
+Boilerplate uses a local server to run. To run local server execute command:
+``` sh
+npm run serve
 ```
-http://127.0.0.1:8000/
-```
+This command launches server on some available port and opens editor page in browser.
 
 ## Validation
 For running validation of creative run the following command:
@@ -64,6 +60,14 @@ For packaging your creative into .zip file before uploading to Tactic run the fo
 ``` sh
 npm run zip
 ```
+
+## Minification
+Loading size is usually limited by advertising networks. Minification helps to fulfill these requirments and decrease traffic.
+By default minification is disabled in this boilerplate. To enable it please replace links to indexes in `manifest.json` to `.min.html` versions. For example `"index": "140x350/index.html",` should become `"index": "140x350/index.min.html",`.
+Now you can run `npm run min` to generate minified versions of html, css and js files in creative. If you are using minified `manifest.json` please remember to run `npm run min` before testing your advert after any changes.
+If you are enabled minification you can run `npm run minzip` command to minify and package your creative at once.
+It is advised to enable minification only before uploading your creative to Tactic because during development it is easier to work without minification.
+If you enabled minification you can change links in `manifest.json` back to not minified versions of indexes and continue work with them.
 
 ## Manifest Declaration
 Manifest file explains creative structure. It has to be located in creative's package root and named `manifest.json`. Define default content in `data` object and change it using content editor `editor.html`.

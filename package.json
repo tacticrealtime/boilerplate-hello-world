@@ -1,16 +1,21 @@
 {
-  "name": "image-text-primitive",
+  "name": "hello-world",
   "version": "1.0.0",
   "devDependencies": {
+    "creative-minifier": "github:tacticrealtime/creative-minifier",
+    "creative-packager": "github:tacticrealtime/creative-packager",
     "creative-validator": "github:tacticrealtime/creative-validator",
-    "creative-packager": "github:tacticrealtime/creative-packager"
+    "http-server": "^0.11.1"
   },
   "scripts": {
-    "validate": "./node_modules/creative-validator/bin/creative-validator-cli.js -p ./preview.html",
+    "validate": "./node_modules/creative-validator/bin/creative-validator-cli.js -p ./index.html",
     "validate-formats": "./node_modules/creative-validator/bin/formats-validator-cli.js",
     "validate-security": "./node_modules/creative-validator/bin/security-validator-cli.js",
-    "validate-preview": "./node_modules/creative-validator/bin/preview-validator-cli.js -p ./preview.html",
-    "zip": "./node_modules/creative-packager/index.js -n $npm_package_name -d"
+    "validate-preview": "./node_modules/creative-validator/bin/preview-validator-cli.js -p ./index.html",
+    "min": "./node_modules/creative-minifier/index.js --replace-links --globs !node_modules/* --globs !editor.html --globs !./index.html",
+    "zip": "./node_modules/creative-packager/index.js -n $npm_package_name -d",
+    "minzip": "npm run min && npm run zip",
+    "serve": "./node_modules/http-server/bin/http-server ./ -a 127.0.0.1 --cors -o -c-1"
   },
   "private": true,
   "author": "TACTIC™ Real-Time Marketing",
