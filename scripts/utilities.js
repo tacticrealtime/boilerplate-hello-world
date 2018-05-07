@@ -133,7 +133,7 @@
  */
 	function (win, doc, tactic) {
 
-	// Lend container namespace.
+	// Lend TACTIC utility namespace.
 	var container = tactic.container;
 
 	// Lend TACTIC utility namespace.
@@ -145,6 +145,10 @@
 	var isObject         = utilities.isObject;
 	var isArray          = utilities.isArray;
 	var isUrl            = utilities.isUrl;
+	var isElement        = utilities.isElement;
+	var isNumber         = utilities.isNumber;
+	var isFunction       = utilities.isFunction;
+	var mergeObjects     = utilities.mergeObjects;
 	var getObjectDeepDef = utilities.getObjectDeepDef;
 
 	/**
@@ -188,7 +192,6 @@
 	 * @description Finds indicated CSS style value in DOM object.
 	 */
 	var getStyle = utilities.getStyle = function (target, styleName, defaultValue) {
-		var isElement = utilities.isElement;
 
 		try {
 			if (isElement(target)) {
@@ -216,7 +219,7 @@
 	 * @return {String}
 	 * @description Provides proper image or video source size finder based on holder width and height.
 	 */
-	var extractMediaSource = utilities.extractMediaSource = function (sources, width, height) {
+	var extractAssetSource = utilities.extractAssetSource = function (sources, width, height) {
 
 		/**
 		 * Define default source object.
@@ -224,6 +227,7 @@
 		 */
 		var source = {};
 
+		// Check if sources are provided.
 		if (sources) {
 
 			// Sort sources by size, so the biggest size will be in front.
@@ -259,20 +263,17 @@
 
 	/**
 	 * @function
-	 * @param {Object} source - Media source object.
-	 * @param {String} [format] - Media source selector.
+	 * @param {Object} source - Asset source object.
 	 * @return {String}
 	 * @description Provides proper image or video source size finder based on holder width and height.
 	 */
-	var extractMediaSourceUrl = utilities.extractMediaSourceUrl = function (source, format) {
-
-		format = isString(format) ? format : 'url';
+	var extractAssetSourceUrl = utilities.extractAssetSourceUrl = function (source) {
 
 		/**
 		 * Define default source URL.
 		 * @type {String}
 		 */
-		var url = isObject(source) ? isString(source[format]) ? source[format] : '' : '';
+		var url = isObject(source) ? isString(source['url']) ? source['url'] : '' : '';
 
 		// Check if URL was identified.
 		// Check if URL is valid, otherwise means it is possibly local.
@@ -298,11 +299,6 @@
 	 */
 	var calculateElementScale = utilities.calculateElementScale
 		= function (elementWidth, elementHeight, containerWidth, containerHeight, params) {
-
-		// Lend TACTIC utilities.
-		var isString         = utilities.isString;
-		var isArray          = utilities.isArray;
-		var getObjectDeepDef = utilities.getObjectDeepDef;
 
 		// Set default values.
 		var
@@ -338,22 +334,25 @@
 			offsetTop  = 1;
 
 		// Validate parameters.
+		params = params || {};
+
+		// Validate parameter values;
 		params = {
 
 			/**
 			 * @type {Array}
 			 */
-			align: getObjectDeepDef(params, 'align', ['center', 'middle'], isArray),
+			align: params.align || ['center', 'middle'],
 
 			/**
 			 * @type {String}
 			 */
-			scale: getObjectDeepDef(params, 'scale', 'fill', isString),
+			scale: params.scale || 'fill',
 
 			/**
 			 * @type {Array}
 			 */
-			crop: getObjectDeepDef(params, 'crop', [0, 0, 0, 0], isArray)
+			crop: params.crop || [0, 0, 0, 0]
 
 		};
 
@@ -481,10 +480,6 @@
 	 */
 	var calculateFontSize = utilities.calculateFontSize = function (target, containerWidth, containerHeight) {
 
-		// Lend TACTIC utilities.
-		var isElement = utilities.isElement;
-		var getStyle  = utilities.getStyle;
-
 		var
 
 			/**
@@ -495,7 +490,7 @@
 			/**
 			 * @type {Number}
 			 */
-			sizeMatches = NaN;
+			sizeMatch   = NaN;
 
 		// Check if target is valid.
 		if (isElement(target)) {
@@ -503,7 +498,6 @@
 			var adjust = function (size) {
 
 				try {
-
 					if (size > 1) {
 						if (target.offsetWidth > containerWidth || target.offsetHeight > containerHeight) {
 							size--;
@@ -520,7 +514,7 @@
 			try {
 				target.style.visibility = 'hidden';
 				sizeInitial             = parseInt(getStyle(target, 'fontSize', 24));
-				sizeMatches             = adjust(sizeInitial);
+				sizeMatch               = adjust(sizeInitial);
 				target.style.fontSize   = sizeInitial + 'px';
 				target.style.visibility = '';
 			}
@@ -528,33 +522,42 @@
 
 		}
 
-		return sizeMatches;
+		return sizeMatch;
+	};
+
+	/**
+	 * @function
+	 * @param {Array} props - List of props.
+	 * @param {Number} filter - Property filter.
+	 * @return {Object|Array}
+	 * @description Select property from array depending on filter property.
+	 */
+	var selectProperty = utilities.selectProperty = function (props, filter) {
+
+		var a = props.filter(function (object) {
+			return object[0] <= filter;
+		}).sort(function (a, b) {
+			if (a[0] < b[0]) {
+				return 1;
+			}
+			if (a[0] > b[0]) {
+				return -1;
+			}
+			return 0;
+		});
+
+		return a[0][1];
 	};
 
 	/**
 	 * @function
 	 * @param {Number} width
 	 * @param {Number} height
+	 * @param {Object} [options]
 	 * @return {String}
 	 * @description Calculate object orientation property.
 	 */
-	var calculateOrientationProperty = utilities.calculateOrientationProperty = function (width, height) {
-
-		var selectProperty = function (props, filter) {
-			var a = props.filter(function (object) {
-				return object[0] <= filter;
-			}).sort(function (a, b) {
-				if (a[0] < b[0]) {
-					return 1;
-				}
-				if (a[0] > b[0]) {
-					return -1;
-				}
-				return 0;
-			});
-
-			return a[0][1];
-		};
+	var calculateOrientationProperty = utilities.calculateOrientationProperty = function (width, height, options) {
 
 		var
 
@@ -566,8 +569,11 @@
 		// Check if values are valid.
 		if (width > 0 && height > 0) {
 
+			// Check if options are provided.
+			options = isArray(options) ? options : [[0, 'portrait'], [0.714, 'square'], [1.5, 'landscape']];
+
 			// Select orientation property.
-			name = selectProperty([[0, 'portrait'], [0.714, 'square'], [1.5, 'landscape']], (width / height));
+			name = selectProperty(options, (width / height));
 
 		}
 
@@ -586,16 +592,6 @@
 	 * @description Places image into HTML element.
 	 */
 	var placeImage = utilities.placeImage = function (target, data, width, height, onComplete, exception) {
-
-		// Lend TACTIC utilities.
-		var isElement        = utilities.isElement;
-		var isObject         = utilities.isObject;
-		var isNumber         = utilities.isNumber;
-		var isFunction       = utilities.isFunction;
-		var isBoolean        = utilities.isBoolean;
-		var isArray          = utilities.isArray;
-		var getObjectDeepDef = utilities.getObjectDeepDef;
-		var mergeObjects     = utilities.mergeObjects;
 
 		var
 
@@ -688,7 +684,7 @@
 						 * Now, when we know actual image scale parameters, we can select appropriate size of the source.
 						 * @type {String}
 						 */
-						url = extractMediaSourceUrl(extractMediaSource(data.sources, scale.width, scale.height));
+						url = extractAssetSourceUrl(extractAssetSource(data.sources, scale.width, scale.height));
 
 					// Attache event listener.
 					image.onload = function () {
@@ -771,6 +767,228 @@
 
 	/**
 	 * @function
+	 * @param {Element} target - Element where video should be placed.
+	 * @param {Object} data - Video data.
+	 * @param {Number} [width] - Container width.
+	 * @param {Number} [height] - Container height.
+	 * @param {Function} [complete] - On complete handler.
+	 * @param {String} [exception] - Parameter exception.
+	 * @return {Element|Video}
+	 * @description Places video into HTML element.
+	 */
+	var placeVideo = utilities.placeVideo = function (target, data, width, height, onComplete, exception) {
+
+		var
+
+			/**
+			 * Create video element to track load progress.
+			 * @type {Element|Video}
+			 */
+			video;
+
+		// Check target and data.
+		if (isElement(target) && isObject(data)) {
+
+			// Check if target is a video tag.
+			if (target.tagName.toLowerCase() == 'video') {
+
+				// Make video same as target.
+				video = target;
+
+			}
+			else {
+
+				// Create new video element.
+				video = doc.createElement('video');
+
+				// Append video to placeholder.
+				target.appendChild(video);
+
+			}
+
+			// Validate image data.
+			data = {
+
+				/**
+				 * @type {Object}
+				 */
+				params: getObjectDeepDef(data, 'params', {}, isObject),
+
+				/**
+				 * @type {Array}
+				 */
+				sources: getObjectDeepDef(data, 'sources', null, isArray)
+
+			};
+
+			// Check if image has exceptional parameters.
+			if (isObject(data.params['excepts'])) {
+
+				// Check if custom exception can be applied.
+				if (!isObject(data.params['excepts'][exception])) {
+
+					// Define orientation exception based on container width and height.
+					exception = calculateOrientationProperty(width, height);
+
+				}
+
+				// Check if exception has to be applied again.
+				if (isObject(data.params['excepts'][exception])) {
+
+					// Merge exception into data.
+					data.params = mergeObjects(data.params, data.params['excepts'][exception], false);
+
+				}
+
+			}
+
+			// Validate container width.
+			width = isNumber(width) ? width : target.offsetWidth;
+
+			// Validate container height.
+			height = isNumber(height) ? height : target.offsetHeight;
+
+			// Check if data has sources available.
+			if (isArray(data.sources) && data.sources.length > 0) {
+
+				/**
+				 * @function
+				 * @description Places video into HTML element.
+				 */
+				function place() {
+
+					var
+
+						/**
+						 * Calculate video scale and position depending on alignment and crop parameters.
+						 * At this point we ignore required video size, we just need width and height ratios.
+						 * @type {Object}
+						 */
+						scale = calculateElementScale(data.sources[0].width, data.sources[0].height, width, height, data.params);
+
+					var
+
+						/**
+						 * Now, when we know actual video scale parameters, we can select appropriate size of the source.
+						 * @type {String}
+						 */
+						source = extractAssetSource(data.sources, scale.width, scale.height);
+
+					var
+
+						/**
+						 * Extract video URL.
+						 * @type {String}
+						 */
+						url = extractAssetSourceUrl(source);
+
+					/**
+					 * @function
+					 * @description Complete video load placement.
+					 */
+					var onLoadedMetaHandler = function () {
+
+						// Remove can play event as it has a double firing bug.
+						// https://stackoverflow.com/questions/33831202/does-setting-currenttime-always-trigger-canplay
+						removeEventSimple(video, 'loadedmetadata', onLoadedMetaHandler);
+
+						// Go to desired video time.
+						video.currentTime = getObjectDeepDef(data, 'params.start.from', 0, isNumber);
+
+						// Check if on complete callback exists.
+						if (isFunction(onComplete)) {
+
+							// Call on complete callback.
+							onComplete.apply(this, [video, url, scale]);
+
+						}
+
+					};
+
+					// Define on video can play handler.
+					addEventSimple(video, 'loadedmetadata', onLoadedMetaHandler);
+
+					// Check if poster has to be picked from asset source as preview image.
+					if (data.params.poster == 'preview') {
+
+						//  Set video poster.
+						video.poster = extractAssetSourceUrl(source, 'preview_url');
+
+					}
+
+					// Check if poster has to be picked from asset source as thumb image.
+					else if (data.params.poster == 'thumb') {
+
+						//  Set video poster.
+						video.poster = extractAssetSourceUrl(source, 'thumb_url');
+
+					}
+
+					// Check if poster is an image URL.
+					else if (isUrl(data.params.poster)) {
+
+						//  Set video poster URL.
+						video.poster = source.params.poster;
+
+					}
+
+					// Set controls attribute only on complete state (so they don't appear while video is waiting for polite load).
+					video.controls = isBoolean(data.params.controls) ? data.params.controls : false;
+
+					// Set preload attribute.
+					video.preload = isString(data.params.preload) ? data.params.preload : 'metadata';
+
+					// Set playsinline attribute.
+					video.playsinline = isBoolean(data.params.inline) ? data.params.inline : true;
+
+					// Set autoplay attribute.
+					video.autoplay = isBoolean(data.params.autoplay) ? data.params.autoplay : false;
+
+					// Set loop attribute.
+					video.loop = isBoolean(data.params.loop) ? data.params.loop : true;
+
+					// Set loop attribute.
+					video.volume = isNumber(data.params.volume) ? data.params.volume : 0.6;
+
+					// Set muted attribute.
+					video.muted = isBoolean(data.params.muted) ? data.params.muted : true;
+
+					// Apply video size.
+					video.style.width  = scale.width + 'px';
+					video.style.height = scale.height + 'px';
+
+					// Apply video position.
+					video.style.left = scale.left + 'px';
+					video.style.top  = scale.top + 'px';
+
+					//  Initiate video load process.
+					video.src = url;
+
+				}
+
+				// Check if video has to be loaded politely.
+				if (getObjectDeepDef(data, 'params.polite', false, isBoolean) == true && !container.isPoliteReady()) {
+
+					// Wait for polite ready event to place video.
+					container.one(container.EVT_ADAPTER_POLITE, place);
+
+				}
+				else {
+
+					// Place video immediately.
+					setTimeout(place, 0);
+
+				}
+
+			}
+
+		}
+
+		return video;
+	};
+
+	/**
+	 * @function
 	 * @param {Element} target
 	 * @param {String} data
 	 * @param {Number} [width] - Container width.
@@ -780,12 +998,6 @@
 	 * @description Places string into HTML element.
 	 */
 	var placeText = utilities.placeText = function (target, data, width, height, onComplete) {
-
-		// Lend TACTIC utilities.
-		var isElement  = utilities.isElement;
-		var isString   = utilities.isString;
-		var isNumber   = utilities.isNumber;
-		var isFunction = utilities.isFunction;
 
 		// Validate target and data.
 		if (isElement(target) && isString(data)) {
@@ -855,11 +1067,6 @@
 	 */
 	var watchFont = utilities.watchFont = function (className, callback, timeout) {
 
-		// Lend TACTIC utilities.
-		var isNumber   = utilities.isNumber;
-		var isString   = utilities.isString;
-		var isFunction = utilities.isFunction;
-
 		var
 
 			/**
@@ -914,6 +1121,9 @@
 
 		}
 
+		/**
+		 * @function
+		 */
 		function check() {
 
 			// Check if we're out of time to wait for wont load.
