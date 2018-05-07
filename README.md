@@ -23,6 +23,7 @@ You are free to use any kind of file structure within the package. Below is the 
 | manifest.json | Describes package structure and indicates file relations. Includes default create data. |
 | index.html | Emulates application's content editor environment with banner preview on the side. |
 | tactic.js | TACTIC™ JS library. Script loads creative bundle, advert data and network adapter. This script is included automatically while running creative locally with index.html or when creative package is uploaded to application. |
+| scripts/utilities.js | Creative utilities. Help to place text, images and video into banner DOM. |
 | 300x250/index.html | Banner size wrapper that combines scripts, HTML and CSS. |
 | 300x250/fallback.png | Static fallback image. |
 

@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<title>Hello World</title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
 
+	<!-- Include some utilities. -->
+	<script type="text/javascript" src="../scripts/utilities.js"></script>
+
+	<!-- Apply primitive styles. -->
 	<style type="text/css">
 
 		* {
@@ -19,14 +23,14 @@
 		}
 
 		.table, .cell {
-			width:          100%;
-			height:         100%;
 			text-align:     center;
 			vertical-align: middle;
 		}
 
 		.table {
 			display: table;
+			width:          100%;
+			height:         100%;
 		}
 
 		.cell {
@@ -37,19 +41,24 @@
 			font-size: 36px;
 		}
 
-		.background,
-		.message {
+		p span {
+			display: inline-block;
+		}
+
+		#background,
+		#message {
 			position: absolute;
 			width:    100%;
 			height:   100%;
 		}
 
-		.background {
+		#background {
 			background-size: cover;
 		}
 
 	</style>
 
+	<!-- Wait for bundle ready state and append data into banner. -->
 	<script type="text/javascript">
 
 		/**
@@ -69,8 +78,10 @@
 		 * @typedef {Function} tactic.url.sanitize
 		 */
 
+		// Wait for bundle ready state.
 		tactic.container.ready(function (data) {
 
+			// Attach on click event to open click tag.
 			document.body.onclick = function () {
 
 				tactic.container.clickThrough(data['clicktag'], {
@@ -80,11 +91,21 @@
 
 			};
 
-			document.getElementById('text').innerHTML = data['text'].split('\n').join('</br>');
+			// Append text to it's container.
+			document.getElementById('message-text').innerHTML = data['text'].split('\n').join('</br>');
 
+			// Or use utility to append text.
+			// tactic.utilities.placeText(document.getElementById('message-text'), data['text'], 300, 250);
+
+			// Check if image data is available.
 			if (data.image) {
-				document.getElementById('image').style.backgroundImage
-					= 'url(' + tactic.url.sanitize(data['image']['sources'][0]['url']) + ')';
+
+				// Append image as background style.
+				document.getElementById('background').style.backgroundImage = 'url(' + tactic.url.sanitize(data['image']['sources'][0]['url']) + ')';
+
+				// Or use utility to append image.
+				// tactic.utilities.placeImage(document.getElementById('background'), data.image);
+
 			}
 
 		});
@@ -94,21 +115,15 @@
 </head>
 <body>
 
-<div class="background" id="image"></div>
+	<div id="background"></div>
 
-<div class="message">
-
-	<div class="table">
-
-		<div class="cell">
-
-			<p id="text"></p>
-
+	<div id="message">
+		<div class="table">
+			<div class="cell">
+				<p id="message-text"></p>
+			</div>
 		</div>
-
 	</div>
-
-</div>
 
 </body>
 </html>
