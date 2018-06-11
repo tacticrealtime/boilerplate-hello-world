@@ -15,7 +15,7 @@
     "min": "./node_modules/creative-minifier/index.js --replace-links --globs !node_modules/* --globs !editor.html --globs !./index.html",
     "zip": "./node_modules/creative-packager/index.js -n $npm_package_name -d",
     "minzip": "npm run min && npm run zip",
-    "serve": "node node_modules/http-server/bin/http-server dist -a 127.0.0.1 --cors -o -c-1"
+    "serve": "./node_modules/http-server/bin/http-server ./ -a 127.0.0.1 --cors -o -c-1"
   },
   "private": true,
   "author": "TACTIC™ Real-Time Marketing",
