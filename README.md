@@ -24,15 +24,8 @@ You are free to use any kind of file structure within the package. Below is the 
 | index.html | Emulates application's content editor environment with banner preview on the side. |
 | tactic.js | TACTIC™ JS library. Script loads creative bundle, advert data and network adapter. This script is included automatically while running creative locally with index.html or when creative package is uploaded to application. |
 | emulator.js | Script emulates tactic.js if banner is accessed locally without local boilerplate environment. |
-| scripts/library.js | Declaration of TACTIC™ library methods. |
-| scripts/utilities.js | Common JS helpers and utilities. |
-| scripts/elements.js | TACTIC™ elements that help to place text, image and video assets into banner DOM. |
-| scripts/creative.js | Creative initialisation script. Script waits for font initialisation, parses creative data, compiles creative, sets event binders, tacking points and user interaction logic. |
-| styles/style.css | CSS styles that are common to all banner sizes. |
-| styles/fonts.css | Font related CSS styles. |
 | 300x250/index.html | Banner size wrapper that combines scripts, HTML and CSS. |
 | 300x250/fallback.png | Static fallback image. |
-| assets/ | Folder to store creative assets like logotype, fonts and/ or any kind of other static assets to be used in the banner. |
 
 ## Installation
 First of all, install necessary development dependencies by running
