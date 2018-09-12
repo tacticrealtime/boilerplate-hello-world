@@ -23,9 +23,16 @@ You are free to use any kind of file structure within the package. Below is the 
 | manifest.json | Describes package structure and indicates file relations. Includes default create data. |
 | index.html | Emulates application's content editor environment with banner preview on the side. |
 | tactic.js | TACTIC™ JS library. Script loads creative bundle, advert data and network adapter. This script is included automatically while running creative locally with index.html or when creative package is uploaded to application. |
-| scripts/utilities.js | Creative utilities. Help to place text, images and video into banner DOM. |
+| emulator.js | Script emulates tactic.js if banner is accessed locally without local boilerplate environment. |
+| scripts/library.js | Declaration of TACTIC™ library methods. |
+| scripts/utilities.js | Common JS helpers and utilities. |
+| scripts/elements.js | TACTIC™ elements that help to place text, image and video assets into banner DOM. |
+| scripts/creative.js | Creative initialisation script. Script waits for font initialisation, parses creative data, compiles creative, sets event binders, tacking points and user interaction logic. |
+| styles/style.css | CSS styles that are common to all banner sizes. |
+| styles/fonts.css | Font related CSS styles. |
 | 300x250/index.html | Banner size wrapper that combines scripts, HTML and CSS. |
 | 300x250/fallback.png | Static fallback image. |
+| assets/ | Folder to store creative assets like logotype, fonts and/ or any kind of other static assets to be used in the banner. |
 
 ## Installation
 First of all, install necessary development dependencies by running
@@ -64,11 +71,14 @@ npm run zip
 
 ## Minification
 Loading size is usually limited by advertising networks. Minification helps to fulfill these requirments and decrease traffic.
-By default minification is disabled in this boilerplate. To enable it please replace links to indexes in `manifest.json` to `.min.html` versions. For example `"index": "140x350/index.html",` should become `"index": "140x350/index.min.html",`.
+By default minification is disabled in this boilerplate. To enable it please replace links to indexes in `manifest.json` to `.min.html` versions. For example `"index": "300x250/index.html",` should become `"index": "300x250/index.min.html",`.
 Now you can run `npm run min` to generate minified versions of html, css and js files in creative. If you are using minified `manifest.json` please remember to run `npm run min` before testing your advert after any changes.
 If you are enabled minification you can run `npm run minzip` command to minify and package your creative at once.
 It is advised to enable minification only before uploading your creative to Tactic because during development it is easier to work without minification.
 If you enabled minification you can change links in `manifest.json` back to not minified versions of indexes and continue work with them.
+``` sh
+npm run min
+```
 
 ## Manifest Declaration
 Manifest file explains creative structure. It has to be located in creative's package root and named `manifest.json`. Define default content in `data` object and change it using content editor `editor.html`.
@@ -76,8 +86,8 @@ Manifest file explains creative structure. It has to be located in creative's pa
 {
   "type": "MANIFEST",
   "version": "1.0",
-  "author": "Anton Gorodnyanskiy",
-  "brand": "TACTIC",
+  "author": "Author Name",
+  "brand": "Brand Name",
   "name": "Boilerplate",
   "created": "08/11/2017",
   "updated": "15/11/2017",
@@ -98,7 +108,7 @@ Manifest file explains creative structure. It has to be located in creative's pa
     }
   ],
   "data": {
-    "your": "data here."
+    "key": "Your dynamic value here"
   }
 }
 ```
@@ -270,10 +280,17 @@ tactic.url.sanitize('//crv-res.trtm.io/samples/images/table-laptop-coffee-640.jp
 // Will return 'http://crv-res.trtm.io/samples/images/table-laptop-coffee-640.jpg?__tactic_brand={{BRAND}}'
 ```
 
-## API Utilities
-We provide a set of utilities that you are able to use to ease development of your creative.
-#### tactic.utilities.placeText(target : Element, data : String, [width: Number], [height: Number], [callback: Function]) : Element
+## API Elements
+To ease work with assets, we created common elements that will utilise all content editor features.
+#### tactic.elements.Text(target : Element, data : String, [width: Number], [height: Number], [callback: Function], [props: Array]) : void
 Inject text into creative's DOM element. Method will automatically resize text if it doesn't fit container bounds.
+``` html
+<body>
+    <div id="myTextHolder" style="width: 240px; height: 120px;">
+        <p id="myText"></p>
+    </div>
+</body>
+```
 ``` js
 var
 
@@ -284,18 +301,44 @@ var
 	text = document.getElementById('myText'),
 
 	/**
-	 * Define image data.
+	 * Find text holder in DOM.
+	 * @type {Element}
+	 */
+	textHolder = document.getElementById('myTextHolder'),
+
+	/**
+	 * Define text data.
 	 * @type {Object}
 	 */
-	data = 'Hello World!';
+	data = {
+	    sources: [
+	       {
+	         text: 'Hello World!'
+	       }
+	    ]
+	};
 
-// Inject text DOM.
-tactic.utilities.placeText(text, data, text.offsetWidth, text.offsetHeight, function (target, source, scale) {
-	// Do something on text append complete event.
-});
+var
+
+	/**
+	 * Create new Text element.
+	 * @type {Text}
+	 */
+    element = new tactic.elements.Text(text, data, textHolder.offsetWidth, textHolder.offsetHeight, function () {
+
+    	// Do something on text append complete event.
+    	// For example, output text size to console.
+    	console.log(this.scale);
+
+    });
 ```
-#### tactic.utilities.placeImage(target : Element, data : Object, [width: Number], [height: Number], [callback: Function]) : Element
-Inject video into creative's DOM element.
+#### tactic.elements.Image(target : Element, data : Object, [width: Number], [height: Number], [callback: Function], [props: Array]) : void
+Inject image into creative's DOM element.
+``` html
+<body>
+    <div id="myImage" style="width: 240px; height: 240px;"></div>
+</body>
+```
 ``` js
 var
 
@@ -315,6 +358,14 @@ var
 		 * @type {Object}
 		 */
 		params:  {
+
+			/**
+			 * Identify if image element has to be wrapper in additional HTML tags.
+			 * @type {Array}
+			 */
+			wrappers:       [
+				'div'
+			],
 
 			/**
 			 * Identify cropping settings in percent from edges (top, right, bottom, left).
@@ -358,7 +409,19 @@ var
 			 * Identify if image has to be loaded politely.
 			 * @type {Boolean}
 			 */
-			'polite':   true
+			'polite':   true,
+
+			/**
+			 * Identify if image has to be placed as background image.
+			 * @type {Boolean}
+			 */
+			'background':   true,
+
+			/**
+			 * Identify if image has to be resized, cropped and aligned.
+			 * @type {Boolean}
+			 */
+			'resize':   true
 
 		},
 
@@ -380,13 +443,27 @@ var
 
 	};
 
-// Inject image to DOM.
-tactic.utilities.placeImage(image, data, image.offsetWidth, image.offsetHeight, function (target, source, scale) {
-	// Do something on image load complete event.
-});
+var
+
+	/**
+	 * Create new Image element.
+	 * @type {Text}
+	 */
+    element = new tactic.elements.Image(image, data, image.offsetWidth, image.offsetHeight, function () {
+
+    	// Do something on image load complete event.
+    	// For example output created image object to console.
+    	console.log(this.asset);
+
+    });
 ```
-#### tactic.utilities.placeVideo(target : Element, data : Object, [width: Number], [height: Number], [callback: Function]) : Element
+#### tactic.elements.Video(target : Element, data : Object, [width: Number], [height: Number], [callback: Function], [props: Array]) : void
 Inject video into creative's DOM element.
+``` html
+<body>
+    <div id="myVideo" style="width: 640px; height: 480px;"></div>
+</body>
+```
 ``` js
 var
 
@@ -406,6 +483,14 @@ var
 		 * @type {Object}
 		 */
 		params:  {
+
+			/**
+			 * Identify if image element has to be wrapper in additional HTML tags.
+			 * @type {Array}
+			 */
+			wrappers:       [
+				'div'
+			],
 
 			/**
 			 * Identify cropping settings in percent from edges (top, right, bottom, left).
@@ -491,7 +576,13 @@ var
 			 * Identify if video has to be muted.
 			 * @type {Boolean}
 			 */
-			'muted':    true
+			'muted':    true,
+
+			/**
+			 * Identify if video has to be resized, cropped and aligned.
+			 * @type {Boolean}
+			 */
+			'resize':   true
 
 		},
 
@@ -513,11 +604,20 @@ var
 
 	};
 
-// Inject video to DOM.
-tactic.utilities.placeVideo(video, data, video.offsetWidth, video.offsetHeight, function (target, source, scale) {
-	// Do something on video load complete event.
-});
+var
+
+	/**
+	 * Create new Video element.
+	 * @type {Text}
+	 */
+    element = new tactic.elements.Video(video, data, video.offsetWidth, video.offsetHeight, function (target, source, scale) {
+    	// Do something on video load complete event.
+    	// For example output created video object to console.
+    	console.log(this.asset);
+    });
 ```
+## API Utilities
+We provide a set of utilities that you are able to use to ease development of your creative.
 #### tactic.utilities.watchFont(className : String, callback: Function, [timeout : Number]) : void
 Wait for font load.
 ``` css
@@ -538,10 +638,44 @@ Wait for font load.
 ```
 ``` js
 tactic.utilities.watchFont('OpenSansRegular', function(className, success) {
+    // Check if load was successful.
     if (success) {
-        // Font is loaded.
+        // Output successful status to console.
+        console.log('Font "' + className + '" is loaded.');
     }
 }, 1000);
+```
+#### tactic.utilities.replaceMacros(object : (Object|Array|String), macros: Object, [depth : Number]) : (Object|Array|String)
+Utility replaces text macros in strings and objects recursively. Will return same object, but with replaced macros.
+``` js
+var
+
+	/**
+	 * @type {String}
+	 */
+    rawText = 'The quick {foxColor} fox jumps over the lazy dog.',
+
+	/**
+	 * @type {Object}
+	 */
+    macros = {
+
+    	/**
+    	 * @type {String}
+    	 */
+        foxColor: 'brown'
+    };
+
+var
+
+	/**
+	 * Execute utility and replace raw text with available macros.
+	 * @type {String}
+	 */
+    replacedText = tactic.utilities.replaceMacros(rawText, macros);
+
+// Log updated text to console, will output 'The quick brown fox jumps over the lazy dog.'.
+console.log(replacedText);
 ```
 
 ## Technologies
