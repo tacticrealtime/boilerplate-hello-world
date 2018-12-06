@@ -14,18 +14,19 @@ Content editor provides basic data inputs, such as image or video uploaders, tex
 
 After you are done with your dynamic creative, upload it to TACTIC™ Application. We will analyse, validate and perform quality assurance for you. If no issues will be found, creative will become available for the dedicated brand in the application, and can be used to create new adverts.
 
-## Structure
+## Package Structure
 You are free to use any kind of file structure within the package. Below is the description of various components for this particular Boilerplate package:
 
 |    File    |   Description  |
 |------------|----------------|
-| editor.html | Creative content editor structure. |
 | manifest.json | Describes package structure and indicates file relations. Includes default create data. |
-| index.html | Emulates application's content editor environment with banner preview on the side. |
-| tactic.js | TACTIC™ JS library. Script loads creative bundle, advert data and network adapter. This script is included automatically while running creative locally with index.html or when creative package is uploaded to application. |
-| emulator.js | Script emulates tactic.js if banner is accessed locally without local boilerplate environment. |
+| index.html | Application's content editor environment emulator with included banner preview. |
+| editor.html | Creative content editor structure. |
+| fallback.html | Responsive HTML fallback that is used for automatic fallback generation. |
 | 300x250/index.html | Banner size wrapper that combines scripts, HTML and CSS. |
 | 300x250/fallback.png | Static fallback image. |
+| //crv-sdk.trtm.io/.../tactic.js | TACTIC™ Library scripts. Loads creative bundle, advert data and network adapter. Script is included automatically while running creative locally with boilerplate environment and when creative package is uploaded to application. |
+| //crv-sdk.trtm.io/.../emulator.js | Script emulates TACTIC™ Library if banner is accessed locally without boilerplate environment. |
 
 ## Installation
 First of all, install necessary development dependencies by running
@@ -72,6 +73,16 @@ If you enabled minification you can change links in `manifest.json` back to not 
 ``` sh
 npm run min
 ```
+```
+
+## Fallback Generation
+Utility for automatic generation of fallback images for the creatives.
+Fallback generator checks manifest.json for formats, generates a fallback image and saves it to a defined fallback path.
+By default, the fallback generator will try to look for ./assets/logotype.png image and will use it in fallback.html for image generation.
+If you specify a custom HTML-file path fallback generator will open your HTML-file, resize its viewport based on the defined formats and generate an image.
+``` sh
+npm run fallback
+```
 
 ## Manifest Declaration
 Manifest file explains creative structure. It has to be located in creative's package root and named `manifest.json`. Define default content in `data` object and change it using content editor `editor.html`.
@@ -90,7 +101,7 @@ Manifest file explains creative structure. It has to be located in creative's pa
   },
   "sizes": [
     {
-      "type": "STATIC",
+      type: "STATIC",
       "name": "140x350",
       "width": 140,
       "height": 350,
@@ -174,8 +185,7 @@ Use `video-picker` tag to give user ability to define video data. You are able t
 <block-field title="My Video">
     <image-picker model="$data.video"
 			settings="{'defaults': {'params': {'scale': 'fill', 'polite': true, 'mute': true, 'controls': false, 'autoplay': true}}, 'cropping': { 'ratios': {'300x250': {'label': '300x250', 'value': '300x250'}}}}"
-			no-crop="false" no-align="false" no-cover="false" no-load="false"
-			no-autoplay="true" no-controls="true" no-mute="true"></image-picker>
+			no-crop="false" no-align="false" no-cover="false" no-load="false" no-autoplay="true" no-controls="true" no-mute="true" no-loop="false"></image-picker>
 </block-field>
 ```
 #### Color Picker
@@ -195,10 +205,10 @@ tactic.container.ready(function (data) {
 
     var
 		/**
-		 * Initialise your creative object as soon as you get data.
+		 * Initialise your banner as soon as you get data.
 		 * @type {Creative}
 		 */
-		creative = new YourCreativeInitialiser(data);
+		banner = new YourBannerInitialiser(data);
 
 });
 ```
@@ -270,17 +280,200 @@ tactic.container.one(tactic.container.EVT_ADAPTER_POLITE, function() {
 Sanitize your URL to get correct protocol.
 ``` js
 tactic.url.sanitize('//crv-res.trtm.io/samples/images/table-laptop-coffee-640.jpg');
-// Will return 'http://crv-res.trtm.io/samples/images/table-laptop-coffee-640.jpg?__tactic_brand={{BRAND}}'
+// Will return 'https://crv-res.trtm.io/samples/images/table-laptop-coffee-640.jpg?__tbi=0'
 ```
 
-## API Elements
+## API Layers
 To ease work with assets, we created common elements that will utilise all content editor features.
-#### tactic.elements.Text(target : Element, data : String, [width: Number], [height: Number], [callback: Function], [props: Array]) : void
-Inject text into creative's DOM element. Method will automatically resize text if it doesn't fit container bounds.
+#### tactic.layers.BannerLayer(key : String, data : Object, [callback : Function], [overrides : Object]) : void
+Creates banner instance, will try to parse and build layers identified in advert data automatically.
+``` html
+<body></body>
+```
+``` js
+var
+
+	/**
+	 * Define banner data.
+	 * @type {Object}
+	 */
+	data       = {
+
+		/**
+		 * @type {String}
+		 */
+		type: "BannerLayer",
+
+		/**
+		 * Indicate banner click tag parameters.
+		 * Use "BannerLayer.getClickTag()" method later to get clicktag value and URL variables.
+		 *
+		 * @type {Object}
+		 */
+		clicktag: {
+
+			/**
+			 * @type {Boolean}
+			 */
+			override: true,
+
+			/**
+			 * Indicate if requested URL variables have to be merged with initial network variables. Default value is 'true'.
+			 *
+			 * @type {Boolean}
+			 */
+			synchronise: true,
+
+			/**
+			 * Indicate if URL variables have to be encoded. Default value is 'true'.
+			 *
+			 * @type {Boolean}
+			 */
+			encode: true,
+
+			/**
+			 * Indicate redirect URL value.
+			 *
+			 * @type {String}
+			 */
+			url: "https://www.tacticrealtime.com/",
+
+			/**
+			 * Indicate alternative click tags (e.g. if you need different click tag per banner frame).
+			 *
+			 * @type {Array}
+			 */
+			options: [
+				{
+
+					/**
+					 * @type {String}
+					 */
+					url: "https://www.tacticrealtime.com/platform/"
+
+				}
+			]
+		},
+
+		/**
+		 * Indicate banner UTM definition values.
+		 * Will be added as URL variables to destination URL on BannerLayer.getClickTag() method call.
+		 *
+		 * @type {Object}
+		 */
+		definition: {
+
+			/**
+			 * @type {String}
+			 */
+			utm_campaign: "",
+
+			/**
+			 * @type {String}
+			 */
+			utm_content: "",
+
+			/**
+			 * @type {String}
+			 */
+			utm_medium: "",
+
+			/**
+			 * @type {String}
+			 */
+			utm_source: "",
+
+			/**
+			 * @type {String}
+			 */
+			utm_term: ""
+
+		},
+
+		/**
+		 * Define banner parameters.
+		 * @type {Object}
+		 */
+		params: {
+
+			/**
+			 * @type {Object}
+			 */
+			wait: {
+
+				/**
+				 * Indicate if banner has to wait for font load complete event.
+				 * @type {Array}
+				 */
+				fonts: [
+
+					/**
+					 * Indicate font face to wait for.
+					 *
+					 * @type {String}
+					 */
+					"OpenSans"
+
+				]
+
+			}
+		},
+
+		/**
+		 * @type {Object}
+		 */
+		layers: {
+
+			// Recursive layer structure.
+
+		}
+
+	};
+
+var
+
+	/**
+	 * Create new Banner layer.
+	 * @type {tactic.layers.BannerLayer}
+	 */
+	banner = new tactic.layers.BannerLayer('BANNER', data, function (event) {
+
+		// Look for event type.
+		switch (event.type) {
+
+			case 'init':
+
+				// Load text on init.
+				this.load();
+
+				break;
+
+			case 'load':
+
+				// Do something on load complete event.
+				// For example output created image object to console.
+				console.log(this);
+
+				break;
+
+		}
+
+	});
+```
+
+
+#### tactic.layers.TextLayer(key : String, data : Object, [callback : Function], [parent : Object], [overrides : Object]) : void
+Inject text into banner's DOM element. Method will automatically resize text if it doesn't fit container bounds.
 ``` html
 <body>
-    <div id="myTextHolder" style="width: 240px; height: 120px;">
-        <p id="myText"></p>
+    <div data-key="TEXT_WRAPPER" style="width: 240px; height: 120px;">
+    	<table>
+    		<tr>
+    			<td data-key="TEXT_HOLDER">
+						<div data-ket="TEXT"></div>
+    			</td>
+    		</tr>
+    	</table>
     </div>
 </body>
 ```
@@ -288,58 +481,119 @@ Inject text into creative's DOM element. Method will automatically resize text i
 var
 
 	/**
-	 * Find text container in DOM.
-	 * @type {Element}
-	 */
-	text = document.getElementById('myText'),
-
-	/**
-	 * Find text holder in DOM.
-	 * @type {Element}
-	 */
-	textHolder = document.getElementById('myTextHolder'),
-
-	/**
 	 * Define text data.
 	 * @type {Object}
 	 */
-	data = {
-	    sources: [
-	       {
-	         text: 'Hello World!'
-	       }
-	    ]
+	data       = {
+
+		/**
+		 * @type {String}
+		 */
+		type: "TextLayer",
+
+		/**
+		 * Define layer parameters.
+		 * @type {Object}
+		 */
+		params: {
+
+			/**
+			 * Identify text holder, it will be used to apply font size value while automatic text size adjustment.
+			 * @type {Array}
+			 */
+			holder: 'TEXT_HOLDER',
+
+			/**
+			 * Identify text wrapper, it will be used as text area size indicator while automatic text size adjustment.
+			 * @type {Array}
+			 */
+			wrapper: 'TEXT_WRAPPER',
+
+			/**
+			 * Identify if text element has to be wrapper in additional HTML tags.
+			 * @type {Array}
+			 */
+			tags: [
+				'p'
+			],
+
+			/**
+			 * Identify line break params.
+			 * @type  {Object}
+			 */
+			line: {
+
+				/**
+				 * Identify HTML element before line break.
+				 * @type  {String}
+				 */
+				before: '',
+
+				/**
+				 * Identify HTML element after line break.
+				 * @type  {String}
+				 */
+				after: '<br/>'
+
+			}
+
+		},
+
+		/**
+		 * Identify text source options.
+		 * Text with smaller length will be selected if application will identify that big text can't fit container.
+		 * @type {Array}
+		 */
+		sources: [
+			{
+				text: 'Hello World! Text option with long text here.'
+			},
+			{
+				text: 'Hello World!'
+			}
+		]
+
 	};
 
 var
 
 	/**
-	 * Create new Text element.
+	 * Create new Text layer.
 	 * @type {Text}
 	 */
-    element = new tactic.elements.Text(text, data, textHolder.offsetWidth, textHolder.offsetHeight, function () {
+	layer = new tactic.layers.TextLayer('TEXT', data, function () {
 
-    	// Do something on text append complete event.
-    	// For example, output text size to console.
-    	console.log(this.scale);
+		// Look for event type.
+		switch (event.type) {
 
-    });
+			case 'init':
+
+				// Load text on init.
+				this.load();
+
+				break;
+
+			case 'load':
+
+				// Do something on load complete event.
+				// For example output created image object to console.
+				console.log(this);
+
+				break;
+
+		}
+
+	});
 ```
-#### tactic.elements.Image(target : Element, data : Object, [width: Number], [height: Number], [callback: Function], [props: Array]) : void
-Inject image into creative's DOM element.
+#### tactic.layers.ImageLayer(key : String, data : Object, [callback : Function], [parent : Object], [overrides : Object]) : void
+Inject image into banner's DOM element.
 ``` html
 <body>
-    <div id="myImage" style="width: 240px; height: 240px;"></div>
+    <div date-key="IMAGE" style="width: 240px; height: 240px;"></div>
 </body>
 ```
 ``` js
 var
-
-	/**
-	 * Find image container in DOM.
-	 * @type {Element}
-	 */
-	image = document.getElementById('myImage'),
 
 	/**
 	 * Define image data.
@@ -348,15 +602,21 @@ var
 	data  = {
 
 		/**
+		 * @type {String}
+		 */
+		type: "ImageLayer",
+
+		/**
+		 * Define layer parameters.
 		 * @type {Object}
 		 */
-		params:  {
+		params: {
 
 			/**
 			 * Identify if image element has to be wrapper in additional HTML tags.
 			 * @type {Array}
 			 */
-			wrappers:       [
+			tags: [
 				'div'
 			],
 
@@ -364,7 +624,7 @@ var
 			 * Identify cropping settings in percent from edges (top, right, bottom, left).
 			 * @type {Array}
 			 */
-			crop:       [
+			crop: [
 				0,
 				0.2,
 				0,
@@ -375,16 +635,16 @@ var
 			 * Identify alignment settings.
 			 * @type {Array}
 			 */
-			align:      [
+			align: [
 
 				/**
-				 * Possbile values: 'left', 'center', 'right'.
+				 * Possible values: 'left', 'center', 'right'.
 				 * @type {String}
 				 */
 				'center',
 
 				/**
-				 * Possbile values: 'top', 'middle', 'bottom'.
+				 * Possible values: 'top', 'middle', 'bottom'.
 				 * @type {String}
 				 */
 				'middle'
@@ -393,32 +653,33 @@ var
 
 			/**
 			 * Identify if image has to fill or fit container.
-			 * Possbile values:  'fill', 'fit'.
+			 * Possible values:  'fill', 'fit'.
 			 * @type {String}
 			 */
-			'scale':    'fill',
+			scale: 'fill',
 
 			/**
 			 * Identify if image has to be loaded politely.
 			 * @type {Boolean}
 			 */
-			'polite':   true,
+			polite: true,
 
 			/**
 			 * Identify if image has to be placed as background image.
 			 * @type {Boolean}
 			 */
-			'background':   true,
+			background: false,
 
 			/**
 			 * Identify if image has to be resized, cropped and aligned.
 			 * @type {Boolean}
 			 */
-			'resize':   true
+			resize: true
 
 		},
 
 		/**
+		 * Identify image source options.
 		 * @type {Array}
 		 */
 		sources: [
@@ -439,32 +700,42 @@ var
 var
 
 	/**
-	 * Create new Image element.
+	 * Create new Image layer.
 	 * @type {Text}
 	 */
-    element = new tactic.elements.Image(image, data, image.offsetWidth, image.offsetHeight, function () {
+	layer = new tactic.layers.ImageLayer('IMAGE', data, function (event) {
 
-    	// Do something on image load complete event.
-    	// For example output created image object to console.
-    	console.log(this.asset);
+		// Look for event type.
+		switch (event.type) {
 
-    });
+			case 'init':
+
+				// Load image on init.
+				this.load();
+
+				break;
+
+			case 'load':
+
+				// Do something on load complete event.
+				// For example output created image object to console.
+				console.log(this);
+
+				break;
+
+		}
+
+	});
 ```
-#### tactic.elements.Video(target : Element, data : Object, [width: Number], [height: Number], [callback: Function], [props: Array]) : void
-Inject video into creative's DOM element.
+#### tactic.layers.VideoLayer(key : String, data : Object, [callback : Function], [parent : Object], [overrides : Object]) : void
+Inject video into banner's DOM element.
 ``` html
 <body>
-    <div id="myVideo" style="width: 640px; height: 480px;"></div>
+    <div date-key="VIDEO" style="width: 640px; height: 480px;"></div>
 </body>
 ```
 ``` js
 var
-
-	/**
-	 * Find video container in DOM.
-	 * @type {Element}
-	 */
-	video = document.getElementById('myVideo'),
 
 	/**
 	 * Define video data.
@@ -473,15 +744,21 @@ var
 	data  = {
 
 		/**
+		 * @type {String}
+		 */
+		type: "VideoLayer",
+
+		/**
+		 * Define layer parameters.
 		 * @type {Object}
 		 */
-		params:  {
+		params: {
 
 			/**
 			 * Identify if image element has to be wrapper in additional HTML tags.
 			 * @type {Array}
 			 */
-			wrappers:       [
+			tags: [
 				'div'
 			],
 
@@ -489,7 +766,7 @@ var
 			 * Identify cropping settings in percent from edges (top, right, bottom, left).
 			 * @type {Array}
 			 */
-			crop:       [
+			crop: [
 				0,
 				0.2,
 				0,
@@ -500,16 +777,16 @@ var
 			 * Identify alignment settings.
 			 * @type {Array}
 			 */
-			align:      [
+			align: [
 
 				/**
-				 * Possbile values: 'left', 'center', 'right'.
+				 * Possible values: 'left', 'center', 'right'.
 				 * @type {String}
 				 */
 				'center',
 
 				/**
-				 * Possbile values: 'top', 'middle', 'bottom'.
+				 * Possible values: 'top', 'middle', 'bottom'.
 				 * @type {String}
 				 */
 				'middle'
@@ -518,64 +795,60 @@ var
 
 			/**
 			 * Identify if image has to fill or fit container.
-			 * Possbile values:  'fill', 'fit'.
+			 * Possible values:  'fill', 'fit'.
 			 * @type {String}
 			 */
-			'scale':    'fill',
+			scale: 'fill',
 
 			/**
 			 * Identify if image has to be loaded politely.
 			 * @type {Boolean}
 			 */
-			'polite':   true,
+			polite: true,
 
 			/**
 			 * Define if video controls have to be displayed.
 			 * @type {Boolean}
 			 */
-			'controls': true,
+			controls: true,
 
 			/**
 			 * Define preload mode.
+			 * Same as defaults for video HTML element (https://www.w3schools.com/tags/att_video_preload.asp).
+			 * Possible values:  'auto', 'metadata', 'none'.
 			 * @type {String}
 			 */
-			'preload':  'metadata',
+			preload: 'metadata',
 
 			/**
 			 * Identify if video has to be played inline.
 			 * @type {Boolean}
 			 */
-			'inline':   true,
+			inline: true,
 
 			/**
 			 * Identify if video has to be played automatically.
 			 * @type {Boolean}
 			 */
-			'autoplay': true,
+			autoplay: true,
 
 			/**
 			 * Identify if video will proceed playing after it ends.
 			 * @type {Boolean}
 			 */
-			'loop':     true,
+			loop: true,
 
 			/**
 			 * Define video volume.
 			 * @type {Number}
 			 */
-			'volume':   0.6,
+			volume: 0.6,
 
 			/**
 			 * Identify if video has to be muted.
 			 * @type {Boolean}
 			 */
-			'muted':    true,
-
-			/**
-			 * Identify if video has to be resized, cropped and aligned.
-			 * @type {Boolean}
-			 */
-			'resize':   true
+			muted: true
 
 		},
 
@@ -600,22 +873,39 @@ var
 var
 
 	/**
-	 * Create new Video element.
+	 * Create new Video layer.
 	 * @type {Text}
 	 */
-    element = new tactic.elements.Video(video, data, video.offsetWidth, video.offsetHeight, function (target, source, scale) {
-    	// Do something on video load complete event.
-    	// For example output created video object to console.
-    	console.log(this.asset);
-    });
+	layer = new tactic.layers.VideoLayer('VIDEO', data, function (event) {
+
+		// Look for event type.
+		switch (event.type) {
+
+			case 'init':
+
+				// Load video on init.
+				this.load();
+
+				break;
+
+			case 'load':
+
+				// Play video on load complete event.
+				this.play();
+
+				break;
+
+		}
+
+	});
 ```
 ## API Utilities
-We provide a set of utilities that you are able to use to ease development of your creative.
+We provide a set of utilities that you are able to use to ease development of your banner.
 #### tactic.utilities.watchFont(className : String, callback: Function, [timeout : Number]) : void
 Wait for font load.
 ``` css
 @font-face {
-	font-family: 'OpenSansRegular';
+	font-family: 'font_regular';
 	src:         url('../assets/fonts/opensans-regular.eot');
 	src:         url('../assets/fonts/opensans-regular.eot?#iefix') format('embedded-opentype'),
 	             url('../assets/fonts/opensans-regular.woff2') format('woff2'),
@@ -625,12 +915,12 @@ Wait for font load.
 	font-style:  normal;
 }
 
-*.OpenSansRegular {
-	font-family: 'OpenSansRegular', sans-serif;
+*.font_regular {
+	font-family: 'font_regular', sans-serif;
 }
 ```
 ``` js
-tactic.utilities.watchFont('OpenSansRegular', function(className, success) {
+tactic.utilities.watchFont('font_regular', function(className, success) {
     // Check if load was successful.
     if (success) {
         // Output successful status to console.
@@ -657,6 +947,7 @@ var
     	 * @type {String}
     	 */
         foxColor: 'brown'
+
     };
 
 var
