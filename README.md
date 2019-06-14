@@ -73,7 +73,6 @@ If you enabled minification you can change links in `manifest.json` back to not 
 ``` sh
 npm run min
 ```
-```
 
 ## Fallback Generation
 Utility for automatic generation of fallback images for the creatives.
@@ -899,9 +898,10 @@ var
 
 	});
 ```
+
 ## API Utilities
 We provide a set of utilities that you are able to use to ease development of your banner.
-#### tactic.utilities.watchFont(className : String, callback: Function, [timeout : Number]) : void
+#### tactic.utils.watchFont(font : String, callback: Function, [timeout : Number]) : void
 Wait for font load.
 ``` css
 @font-face {
@@ -920,15 +920,15 @@ Wait for font load.
 }
 ```
 ``` js
-tactic.utilities.watchFont('font_regular', function(className, success) {
+tactic.utils.watchFont('font_regular', function(font, success) {
     // Check if load was successful.
     if (success) {
         // Output successful status to console.
-        console.log('Font "' + className + '" is loaded.');
+        console.log('Font "' + font + '" is loaded.');
     }
 }, 1000);
 ```
-#### tactic.utilities.replaceMacros(object : (Object|Array|String), macros: Object, [depth : Number]) : (Object|Array|String)
+#### tactic.utils.replaceMacros(object : (Object|Array|String), macros: Object, [depth : Number]) : (Object|Array|String)
 Utility replaces text macros in strings and objects recursively. Will return same object, but with replaced macros.
 ``` js
 var
@@ -956,7 +956,7 @@ var
 	 * Execute utility and replace raw text with available macros.
 	 * @type {String}
 	 */
-    replacedText = tactic.utilities.replaceMacros(rawText, macros);
+    replacedText = tactic.utils.replaceMacros(rawText, macros);
 
 // Log updated text to console, will output 'The quick brown fox jumps over the lazy dog.'.
 console.log(replacedText);
