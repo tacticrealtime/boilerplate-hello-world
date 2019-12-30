@@ -23,10 +23,16 @@ You are free to use any kind of file structure within the package. Below is the 
 | index.html | Application's content editor environment emulator with included banner preview. |
 | editor.html | Creative content editor structure. |
 | fallback.html | Responsive HTML fallback that is used for automatic fallback generation. |
+| scripts/vendor/tactic/library.js | Declaration of default TACTIC™ Library methods. |
+| scripts/vendor/tactic/builder.js | TACTIC™ Builder that help to place text, image and video assets into banner DOM. |
+| scripts/banner.js | Banner initialisation script. Compiles banner, sets event binders, tacking points and user interaction logic. |
+| styles/preset.css | Default CSS style preset for common HTML tags. |
+| styles/common.css | CSS styles that are common to all banner sizes. |
 | 300x250/index.html | Banner size wrapper that combines scripts, HTML and CSS. |
 | 300x250/fallback.png | Static fallback image. |
-| //crv-sdk.trtm.io/.../tactic.js | TACTIC™ Library scripts. Loads creative bundle, advert data and network adapter. Script is included automatically while running creative locally with boilerplate environment and when creative package is uploaded to application. |
-| //crv-sdk.trtm.io/.../emulator.js | Script emulates TACTIC™ Library if banner is accessed locally without boilerplate environment. |
+| assets/ | Folder to store banner assets like logotype, fonts and/ or any kind of other static assets to be used in the banner. |
+| tactic.js | TACTIC™ Library scripts. Loads creative bundle, advert data and network adapter. Script is included automatically while running creative locally with boilerplate environment and when creative package is uploaded to application. |
+| emulator.js | Script emulates TACTIC™ Library if banner is accessed locally without boilerplate environment. |
 
 ## Installation
 First of all, install necessary development dependencies by running
