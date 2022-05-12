@@ -2,7 +2,7 @@
 
 	<block-field title="Click Tag">
 
-		<text-field placeholder="URL" model="$data.clicktag" pattern="https?\:\/\/.+"></text-field>
+		<text-field placeholder="URL" model="$data.banner.clicktag" pattern="https?\:\/\/.+"></text-field>
 
 	</block-field>
 
@@ -12,13 +12,13 @@
 
 	<block-field title="Message">
 
-		<text-area placeholder="Text" model="$data.text"></text-area>
+		<text-area placeholder="Text" model="$data.banner.text"></text-area>
 
 	</block-field>
 
 	<block-field title="Background">
 
-		<image-picker model="$data.image" no-crop="true" no-align="true" no-cover="true" no-load="true"></image-picker>
+		<image-picker model="$data.banner.image" no-crop="true" no-align="true" no-cover="true" no-load="true" settings="{defaults:$data.defaults.image}"></image-picker>
 
 	</block-field>
 

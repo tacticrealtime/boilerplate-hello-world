@@ -84,25 +84,32 @@
 		// Wait for bundle ready state.
 		tactic.container.ready(function (data) {
 
+			var
+
+					/**
+					 * @type {Object}
+					 */
+					banner_data = data.banner;
+
 			// Attach on click event to open click tag.
 			document.body.onclick = function () {
 
-				tactic.container.clickThrough(data['clicktag'], {
+				tactic.container.clickThrough(banner_data['clicktag'], {
 					'utm_source':  'display',
-					'utm_content': data['text']
+					'utm_content': banner_data['text']
 				});
 
 			};
 
 			// Append text to it's container.
-			document.getElementById('MESSAGE_TEXT').innerHTML = data['text'].split('\n').join('</br>');
+			document.getElementById('MESSAGE_TEXT').innerHTML = banner_data['text'].split('\n').join('</br>');
 
 			// Check if image data is available.
-			if (data.image) {
+			if (banner_data.image) {
 
 				// Append image as BACKGROUND style.
 				document.getElementById('BACKGROUND').style.backgroundImage
-					= 'url(' + tactic.url.sanitize(data['image']['sources'][0]['url']) + ')';
+					= 'url(' + tactic.url.sanitize(banner_data['image']['sources'][0]['url']) + ')';
 
 			}
 

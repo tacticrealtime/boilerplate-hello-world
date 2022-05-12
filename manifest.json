@@ -23,8 +23,25 @@
     }
   ],
   "data": {
-    "clicktag": "http://www.tacticrealtime.com/",
-    "text": "Hello, World!",
-    "image": null
+    "editor": {
+      "defaults": {
+        "image": {
+          "scale": "fill",
+          "resize": {
+            "method": "holder",
+            "extend": 1
+          },
+          "polite": false,
+          "blur": 0,
+          "quality": 80,
+          "ratio": 1
+        }
+      }
+    },
+    "banner": {
+      "clicktag": "http://www.tacticrealtime.com/",
+      "text": "Hello, World!",
+      "image": null
+    }
   }
 }
