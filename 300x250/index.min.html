@@ -1,0 +1,50 @@
+<!DOCTYPE html><html><head><title>Hello World</title><meta http-equiv=content-type content="text/html; charset=utf-8"><script type=text/javascript tactic-ignore="" src=https://crv-sdk.trtm.io/library/container/1/emulator.min.js></script><style type=text/css>*{margin:0;padding:0}body,html{width:300px;height:250px;cursor:pointer;BACKGROUND:#ccc}.cell,.table{text-align:center;vertical-align:middle}.table{display:table;width:100%;height:100%}.cell{display:table-cell}p{font-size:36px}p span{display:inline-block}#BACKGROUND,#MESSAGE{position:absolute;width:100%;height:100%}#BACKGROUND{BACKGROUND-size:cover}</style><script type=text/javascript>/**
+		 * @namespace tactic.container
+		 */
+
+		/**
+		 * @typedef {Function} tactic.container.ready
+		 * @typedef {Function} tactic.container.clickThrough
+		 */
+
+		/**
+		 * @namespace tactic.url
+		 */
+
+		/**
+		 * @typedef {Function} tactic.url.sanitize
+		 */
+
+		// Wait for bundle ready state.
+		tactic.container.ready(function (data) {
+
+			var
+
+					/**
+					 * @type {Object}
+					 */
+					banner_data = data.banner;
+
+			// Attach on click event to open click tag.
+			document.body.onclick = function () {
+
+				tactic.container.clickThrough(banner_data['clicktag'], {
+					'utm_source':  'display',
+					'utm_content': banner_data['text']
+				});
+
+			};
+
+			// Append text to it's container.
+			document.getElementById('MESSAGE_TEXT').innerHTML = banner_data['text'].split('\n').join('</br>');
+
+			// Check if image data is available.
+			if (banner_data.image) {
+
+				// Append image as BACKGROUND style.
+				document.getElementById('BACKGROUND').style.backgroundImage
+					= 'url(' + tactic.url.sanitize(banner_data['image']['sources'][0]['url']) + ')';
+
+			}
+
+		});</script></head><body><div id=BACKGROUND></div><div id=MESSAGE><div class=table><div class=cell><p id=MESSAGE_TEXT></p></div></div></div></body></html>

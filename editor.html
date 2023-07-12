@@ -1,14 +1,7 @@
-<block title="Setup">
 
-	<block-field title="Click Tag">
+<block>
 
-		<text-field placeholder="URL" model="$data.banner.clicktag" pattern="https?\:\/\/.+"></text-field>
-
-	</block-field>
-
-</block>
-
-<block title="Content">
+	<block-label title="Elements"></block-label>
 
 	<block-field title="Message">
 
@@ -18,7 +11,19 @@
 
 	<block-field title="Background">
 
-		<image-picker model="$data.banner.image" no-crop="true" no-align="true" no-cover="true" no-load="true" settings="{defaults:$data.defaults.image}"></image-picker>
+		<image-picker model="$data.banner.image"></image-picker>
+
+	</block-field>
+
+</block>
+
+<block>
+
+	<block-label title="Settings"></block-label>
+
+	<block-field title="Landing">
+
+		<text-field placeholder="URL" model="$data.banner.clicktag" pattern="https?\:\/\/.+"></text-field>
 
 	</block-field>
 
