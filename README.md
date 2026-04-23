@@ -1,59 +1,44 @@
-# [TACTIC™ Boilerplate](https://tacticrealtime.com/)
-# Make Your Own Dynamic Creatives
-
-TACTIC™ Boilerplate is a part of TACTIC™ Creative SDK. Boilerplate provides you with a set of instruments and creative examples that shows you how to put together custom Dynamic Creatives. You have full control of the layout, size and content. You can create your own creatives depending on your individual needs.
-
-Boilerplate package is designed to help developers to create, test and debug custom dynamic creatives before they will be uploaded to TACTIC™ application. The package includes development environment which allows to emulate TACTIC™ application's content editor and creative's public methods.
-
-The package can be also used as an example and guide for development of dynamic creatives in general. It will explain how to recursively build complex frames and layers, place various assets, open click tags and much more. Package will also give you a hint on how to create multiple banner sizes which use common styles, scripts and single data source. Note that you can edit existing example or make your own creative from scratch. You're not obliged to use suggested creative example or creative data (with the only limitation for JSON asset data structure that come from predefined application's image and video picker directives).
-
-## Solution
-TACTIC™ Boilerplate allows to set dynamic creative data structure and see how data affects banner appearance at the same time. Boilerplate emulates application content (data) editor, so that the developer can build data structure, analyse content editor behaviour and develop banners at the same time, without the need to compile whole TACTIC™ application.
-
-Content editor provides basic data inputs, such as image or video uploaders, text inputs, drop downs, buttons etc. Use them to create content editor layout and data points. Boilerplate will provide this data for the banner, so you can change its appearance, behaviour, and place various assets into previously defined place holers.
-
-After you are done with your dynamic creative, upload it to TACTIC™ Application. We will analyse, validate and perform quality assurance for you. If no issues will be found, creative will become available for the dedicated brand in the application, and can be used to create new adverts.
-
-## Package Structure
-You are free to use any kind of file structure within the package. Below is the description of various components for this particular Boilerplate package:
-
-|    File    |   Description  |
-|------------|----------------|
-| manifest.json | Describes package structure and indicates file relations. Includes default create data. |
-| index.html | Application's content editor environment emulator with included banner preview. |
-| editor.html | Creative content editor structure. |
-| fallback.html | Responsive HTML fallback that is used for automatic fallback generation. |
-| scripts/vendor/tactic/library.js | Declaration of default TACTIC™ Library methods. |
-| scripts/vendor/tactic/builder.js | TACTIC™ Builder that help to place text, image and video assets into banner DOM. |
-| scripts/banner.js | Banner initialisation script. Compiles banner, sets event binders, tacking points and user interaction logic. |
-| styles/preset.css | Default CSS style preset for common HTML tags. |
-| styles/common.css | CSS styles that are common to all banner sizes. |
-| 300x250/index.html | Banner size wrapper that combines scripts, HTML and CSS. |
-| 300x250/fallback.png | Static fallback image. |
-| assets/ | Folder to store banner assets like logotype, fonts and/ or any kind of other static assets to be used in the banner. |
-| tactic.js | TACTIC™ Library scripts. Loads creative bundle, advert data and network adapter. Script is included automatically while running creative locally with boilerplate environment and when creative package is uploaded to application. |
-| emulator.js | Script emulates TACTIC™ Library if banner is accessed locally without boilerplate environment. |
+# Dynamic Creative
 
 ## Installation
-First of all, install necessary development dependencies by running
+To **install** development environment:
 ``` sh
 npm install
 ```
 
-Boilerplate uses a local server to run. To run local server execute command:
+To run **local server**:
 ``` sh
 npm run serve
 ```
-This command launches server on some available port and opens editor page in browser.
+
+## Compilation
+To **compile and minify everything**:
+``` sh
+npm run min
+```
+To compile **editor** only:
+``` sh
+npm run editor
+```
+To create JS files out of **SVG** files:
+``` sh
+npm run svg
+```
+To generate **fallback** images:
+``` sh
+npm run fallback
+```
 
 ## Validation
-For running validation of creative run the following command:
+Validation helps to determine if banner runs without errors.
+For more information about validation service, go to [this page](https://github.com/tacticrealtime/creative-validator/blob/master/ERROR_LIST.md).
+
+To run full validation:
 ``` sh
 npm run validate
 ```
 
-Validation consists of three parts: formats validation, security validation and preview validation.
-If you found errors on some stages and fixed them you can run only specific validation by executing on of three commands:
+To run independent validators:
 
 `npm run validate-formats` for formats validation
 
@@ -61,33 +46,36 @@ If you found errors on some stages and fixed them you can run only specific vali
 
 `npm run validate-preview` for preview validation
 
-For detailed description of validation errors please see [this page](https://github.com/tacticrealtime/creative-validator/blob/master/ERROR_LIST.md).
-
 ## Packaging
-For packaging your creative into .zip file before uploading to Tactic run the following command:
+To pack the template into TACTIC application compatible *.zip package:
 ``` sh
 npm run zip
 ```
-
-## Minification
-Loading size is usually limited by advertising networks. Minification helps to fulfill these requirments and decrease traffic.
-By default minification is disabled in this boilerplate. To enable it please replace links to indexes in `manifest.json` to `.min.html` versions. For example `"index": "300x250/index.html",` should become `"index": "300x250/index.min.html",`.
-Now you can run `npm run min` to generate minified versions of html, css and js files in creative. If you are using minified `manifest.json` please remember to run `npm run min` before testing your advert after any changes.
-If you are enabled minification you can run `npm run minzip` command to minify and package your creative at once.
-It is advised to enable minification only before uploading your creative to Tactic because during development it is easier to work without minification.
-If you enabled minification you can change links in `manifest.json` back to not minified versions of indexes and continue work with them.
+To compile, minify and pack at once:
 ``` sh
-npm run min
+npm run minzip
 ```
 
-## Fallback Generation
-Utility for automatic generation of fallback images for the creatives.
-Fallback generator checks manifest.json for formats, generates a fallback image and saves it to a defined fallback path.
-By default, the fallback generator will try to look for ./assets/logotype.png image and will use it in fallback.html for image generation.
-If you specify a custom HTML-file path fallback generator will open your HTML-file, resize its viewport based on the defined formats and generate an image.
-``` sh
-npm run fallback
-```
+## Package Structure
+You are free to use any kind of file structure within the package. Below is the description of various components for this particular Boilerplate package:
+
+| File                                  | Description                                                                                    |
+|---------------------------------------|------------------------------------------------------------------------------------------------|
+| /manifest.json                        | Banner configuration, default data structure and size relations.                               |
+| /html/*                               | Banner HTML source files.                                                                      |
+| /banner.html                          | Banner HTML, usually one file for all banner sizes.                                            |
+| /styles/*                             | Banner CSS files.                                                                              |
+| /scripts/*                            | Banner JavaScript files.                                                                       |
+| /scripts/banner.js                    | Banner initialisation scripts, event bindings and gesture logics.                              |
+| /assets/*                             | Folder containing static banner assets. E.g. logotypes, fonts, icons, etc.                     |
+| /fallback.html                        | Responsive HTML fallback that is used for automatic fallback generation.                       |
+| /fallbacks/*                          | Folder containing static fallback images.                                                      |
+| /editor/*                             | Content editor source code.                                                                    |
+| /index.html                           | Application's content editor environment emulator with included banner preview.                |
+| /preview.html                         | Multi-size banner preview environment, redirects to the external page.                         |
+| //crv-sdk.trtm.io/.../builder-x.xx.js | TACTIC™ Builder scripts, image and video assets into banner DOM.                               |
+| //crv-sdk.trtm.io/.../tactic.js       | TACTIC™ Library scripts. Loads creative bundle, advert data and network adapter.               |
+| //crv-sdk.trtm.io/.../emulator.js     | Script emulates TACTIC™ Library if banner is accessed locally without boilerplate environment. |
 
 ## Manifest Declaration
 Manifest file explains creative structure. It has to be located in creative's package root and named `manifest.json`. Define default content in `data` object and change it using content editor `editor.html`.
@@ -96,36 +84,86 @@ Manifest file explains creative structure. It has to be located in creative's pa
   "type": "MANIFEST",
   "version": "1.0",
   "author": "Author Name",
-  "brand": "Brand Name",
-  "name": "Boilerplate",
-  "created": "08/11/2017",
-  "updated": "15/11/2017",
-  "editor": {
-    "url": "editor.html",
-    "version": "1.1"
+  "brand": "100",
+  "name": "Template Name V1",
+  "created": "26/03/2025",
+  "updated": "26/03/2025",
+  "editor": { "url": "editor/index.html", "version": "1.1" },
+  "build": 2048,
+  "data": {
+    "editor": {
+      "scope": { "frame": 0 },
+      "mode": "simple",
+      "pause": true,
+      "jump": true,
+      "grid": false
+    },
+    "banner": {
+      "type": "BannerLayer",
+      "layers": {
+        "CV": {
+            "type": "JointLayer",
+            "layers": {
+                ...
+            }
+          }
+        }
+      }
+    }
   },
   "sizes": [
     {
-      type: "STATIC",
-      "name": "140x350",
-      "width": 140,
-      "height": 350,
-      "index": "140x350/index.html",
-      "fallback": {
-        "static": "140x350/fallback.png"
-      }
+      "type": "FIXED",
+      "name": "580x400",
+      "width": 580,
+      "height": 400,
+      "index": "banner.min.html",
+      "fallback": { "static": "./fallbacks/580x400.png" }
+    },
+    {
+      "type": "RESPONSIVE",
+      "name": "RxR",
+      "width": "100%",
+      "height": "100%",
+      "index": "banner.min.html",
+      "fallback": { "static": "./fallbacks/0x0.png" }
     }
   ],
-  "data": {
-    "key": "Your dynamic value here"
-  }
+  "relations": [
+    { "type": "TENSION", "id": "CV_tens_t3", "name": "T3", "min": 0, "max": 0.25 },
+    { "type": "TENSION", "id": "CV_tens_t2", "name": "T2", "min": 0.25, "max": 0.4 },
+    { "type": "TENSION", "id": "CV_tens_t1", "name": "T1", "min": 0.4, "max": 0.6 },
+    { "type": "TENSION", "id": "CV_tens_t0", "name": "T0", "min": 0.6, "max": 0.8 },
+    { "type": "TENSION", "id": "CV_tens_e0", "name": "E0", "min": 0.8, "max": 1.2 },
+    { "type": "TENSION", "id": "CV_tens_w0", "name": "W0", "min": 1.2, "max": 1.8 },
+    { "type": "TENSION", "id": "CV_tens_w1", "name": "W1", "min": 1.8, "max": 2.8 },
+    { "type": "TENSION", "id": "CV_tens_w2", "name": "W2", "min": 2.8, "max": 6 },
+    { "type": "TENSION", "id": "CV_tens_w3", "name": "W3", "min": 6, "max": null },
+    { "type": "SCALE", "id": "CV_scale_xs", "name": "XS", "min": 0, "max": 32000 },
+    { "type": "SCALE", "id": "CV_scale_s", "name": "S", "min": 32000, "max": 64000 },
+    { "type": "SCALE", "id": "CV_scale_m", "name": "M", "min": 64000, "max": 128000 },
+    { "type": "SCALE", "id": "CV_scale_l", "name": "L", "min": 128000, "max": 256000 },
+    { "type": "SCALE", "id": "CV_scale_xl", "name": "XL", "min": 256000, "max": 512000 },
+    { "type": "SCALE", "id": "CV_scale_xxl", "name": "XXL", "min": 512000, "max": null }
+  ],
+  "exports": {
+    "config": [
+      { "type": "html", "speed": 10, "time": 5000 },
+      { "type": "gif", "speed": 10, "time": 5000 },
+      { "type": "jpeg", "speed": 1, "time": 3000 },
+      { "type": "png", "speed": 1, "time": 3000, "enabled": false }
+    ]
+  },
+  "macros": [
+    { "name": "${var_1}", "type": "text" }
+  ]
 }
 ```
 
 ## Content Editor
 Creative content editor `editor.html` provides various data inputs that you can use to give application user ability to edit dynamic content.
-For detailed content edtior example please see [this page](https://github.com/tacticrealtime/creative-editor/).
-#### Base
+For detailed content editor example please see [this page](https://github.com/tacticrealtime/creative-editor/).
+### Base
 Use `block`, `block-label` and `block-group` tags to create content editor structure.
 ``` html
 <block title="Block">
@@ -135,21 +173,21 @@ Use `block`, `block-label` and `block-group` tags to create content editor struc
     </block-group>
 </block>
 ```
-#### Text Field
+### Text Field
 Use `text-field` tag to give user ability to define single line text values.
 ``` html
 <block-field title="My Text">
     <text-field placeholder="Value" model="$data.text"></text-field>
 </block-field>
 ```
-#### Text Area
+### Text Area
 Use `text-field` tag to give user ability to define multi-line text values.
 ``` html
 <block-field title="My Text">
     <text-area placeholder="Value" model="$data.text"></text-area>
 </block-field>
 ```
-#### Switch Button
+### Switch Button
 ``` html
 <block-field title="Switch">
     <switch-button model="$data.switch">
@@ -158,13 +196,13 @@ Use `text-field` tag to give user ability to define multi-line text values.
 	</switch-button>
 </block-field>
 ```
-#### Toggle Button
+### Toggle Button
 ``` html
 <block-field title="Toggle">
     <toggle-button model="$data.toggle" on="On" off="Off"></toggle-button>
 </block-field>
 ```
-#### Dropdown Select
+### Dropdown Select
 ``` html
 <block-field title="Select">
    <dropdown-select model="$data.dropdown">
@@ -175,7 +213,7 @@ Use `text-field` tag to give user ability to define multi-line text values.
 	</dropdown-select>
 </block-field>
 ```
-#### Image Picker
+### Image Picker
 Use `image-picker` tag to give user ability to define image data. You are able to disable any kind of available image settings and define default parameters.
 ``` html
 <block-field title="My Image">
@@ -184,7 +222,7 @@ Use `image-picker` tag to give user ability to define image data. You are able t
 			no-crop="false" no-align="false" no-cover="false" no-load="false"></image-picker>
 </block-field>
 ```
-#### Video Picker
+### Video Picker
 Use `video-picker` tag to give user ability to define video data. You are able to disable any kind of available image settings and define default parameters.
 ``` html
 <block-field title="My Video">
@@ -193,7 +231,7 @@ Use `video-picker` tag to give user ability to define video data. You are able t
 			no-crop="false" no-align="false" no-cover="false" no-load="false" no-autoplay="true" no-controls="true" no-mute="true" no-loop="false"></image-picker>
 </block-field>
 ```
-#### Color Picker
+### Color Picker
 Use `color-picker` tag to give user ability to define color.
 ``` html
 <block-field title="My Color">
@@ -202,8 +240,8 @@ Use `color-picker` tag to give user ability to define color.
 ```
 
 ## API Methods
-JavaScript `tactic` namespace with container external methods is always available in the banner. Use it to open click tags, track events or perform any other ad network related actions without thinking about ad networks API differences.
-#### tactic.container.ready(callback : Function) : void
+JavaScript `tactic` namespace with container external methods is always available in the banner. Use it to open click tags, track events or perform any other ad vendor related actions without thinking about ad vendors API differences.
+### tactic.container.ready(callback : Function)
 ``` js
 // Wait for TACTIC Container initialisation ready state.
 tactic.container.ready(function (data) {
@@ -217,20 +255,20 @@ tactic.container.ready(function (data) {
 
 });
 ```
-#### tactic.container.clickThrough(url : String, [vars : Object], [params : Object]) : String
-Open specific destination with additional parameters. Ad netwrok click tag URL (tracker) will be merged with requested URL automatically.
+### tactic.container.clickThrough(url : String, [vars : Object], [params : Object])
+Open landing page destination with or without additional parameters. Ad network click tag URL will be merged with requested URL automatically.
 ``` js
 tactic.container.clickThrough('https://www.yourdestination.com/', {
 
-    /**
+	/**
 	 * Indicate URL variables to be added to destination URL.
 	 * @type {String}
 	*/
-    utm_campaign: 'campaignName'
+	utm_campaign: 'campaignName'
 
 }, {
 
-    /**
+	/**
 	 * Indicate window target.
 	 * @type {String}
 	*/
@@ -243,34 +281,34 @@ tactic.container.clickThrough('https://www.yourdestination.com/', {
 	encode: true,
 
 	/**
-	 * Indicate if requested URL variables have to be merged with initial network variables. Default value is 'true'.
+	 * Indicate if requested URL variables have to be merged with initial ad vendor variables. Default value is 'true'.
 	 * @type {Boolean}
 	 */
 	merge: true
 
 });
 ```
-Open initial ad network click tag.
+To open default ad network click tag.
 ``` js
 tactic.container.clickThrough(null);
 ```
 #### tactic.container.requestResize(width : Number, height : Number, [x : Number], [y : Number]) : Boolean
-Resize banner window (if supported by ad network). Will return 'true' on success.
+Resize banner window (if supported by ad vendor). Will return 'true' on success.
 ``` js
 tactic.container.requestResize(300, 600);
 ```
 #### tactic.container.requestExpand() : Boolean
-Request banner expand (if supported by ad network). Will return 'true' on success.
+Request banner expand (if supported by ad vendor). Will return 'true' on success.
 ``` js
 tactic.container.requestExpand();
 ```
 #### tactic.container.requestCollapse() : Boolean
-Request banner collapse (if supported by ad network). Will return 'true' on success.
+Request banner collapse (if supported by ad vendor). Will return 'true' on success.
 ``` js
 tactic.container.requestCollapse();
 ```
 #### tactic.container.requestClose() : Boolean
-Close banner (if supported by ad network). Will return 'true' on success.
+Close banner (if supported by ad vendor). Will return 'true' on success.
 ``` js
 tactic.container.requestClose();
 ```
@@ -288,7 +326,7 @@ tactic.url.sanitize('//crv-res.trtm.io/samples/images/table-laptop-coffee-640.jp
 // Will return 'https://crv-res.trtm.io/samples/images/table-laptop-coffee-640.jpg?__tbi=0'
 ```
 
-## API Layers
+## Creative Layers
 To ease work with assets, we created common elements that will utilise all content editor features.
 #### tactic.layers.BannerLayer(key : String, data : Object, [callback : Function], [overrides : Object]) : void
 Creates banner instance, will try to parse and build layers identified in advert data automatically.
@@ -441,7 +479,7 @@ var
 	 * Create new Banner layer.
 	 * @type {tactic.layers.BannerLayer}
 	 */
-	banner = new tactic.layers.BannerLayer('BANNER', data, function (event) {
+	banner = new tactic.layers.BannerLayer('BN', data, function (event) {
 
 		// Look for event type.
 		switch (event.type) {
@@ -471,11 +509,11 @@ var
 Inject text into banner's DOM element. Method will automatically resize text if it doesn't fit container bounds.
 ``` html
 <body>
-    <div data-key="TEXT_WRAPPER" style="width: 240px; height: 120px;">
+    <div data-key="TXT_WRAPPER" style="width: 240px; height: 120px;">
     	<table>
     		<tr>
-    			<td data-key="TEXT_HOLDER">
-						<div data-ket="TEXT"></div>
+    			<td data-key="TXT_HOLDER">
+					<div data-ket="TXT"></div>
     			</td>
     		</tr>
     	</table>
@@ -504,15 +542,15 @@ var
 
 			/**
 			 * Identify text holder, it will be used to apply font size value while automatic text size adjustment.
-			 * @type {Array}
+			 * @type {String}
 			 */
-			holder: 'TEXT_HOLDER',
+			holder: 'TXT_HOLDER',
 
 			/**
 			 * Identify text wrapper, it will be used as text area size indicator while automatic text size adjustment.
-			 * @type {Array}
+			 * @type {String}
 			 */
-			wrapper: 'TEXT_WRAPPER',
+			wrapper: 'TXT_WRAPPER',
 
 			/**
 			 * Identify if text element has to be wrapper in additional HTML tags.
@@ -566,7 +604,7 @@ var
 	 * Create new Text layer.
 	 * @type {Text}
 	 */
-	layer = new tactic.layers.TextLayer('TEXT', data, function () {
+	layer = new tactic.layers.TextLayer('TXT', data, function () {
 
 		// Look for event type.
 		switch (event.type) {
@@ -594,7 +632,12 @@ var
 Inject image into banner's DOM element.
 ``` html
 <body>
-    <div date-key="IMAGE" style="width: 240px; height: 240px;"></div>
+    <div data-key="IMG" style="width: 240px; height: 120px;">
+    	<div data-key="IMG_AREA"></div>
+    	<div data-key="IMG_HOLDER">
+			<div data-ket="IMG"></div>
+    	</div>
+    </div>
 </body>
 ```
 ``` js
@@ -616,6 +659,18 @@ var
 		 * @type {Object}
 		 */
 		params: {
+
+			/**
+			 * Identify image holder.
+			 * @type {String}
+			 */
+			holder: 'IMG_HOLDER',
+
+			/**
+			 * Identify image area.
+			 * @type {String}
+			 */
+			wrapper: 'IMG_AREA',
 
 			/**
 			 * Identify if image element has to be wrapper in additional HTML tags.
@@ -661,7 +716,14 @@ var
 			 * Possible values:  'fill', 'fit'.
 			 * @type {String}
 			 */
-			scale: 'fill',
+			scale: 'fit',
+
+			/**
+			 * Set image format to be delivered by image processor.
+			 * Possible values:  'webp', 'png', 'jpeg'.
+			 * @type {String}
+			 */
+			format: 'webp',
 
 			/**
 			 * Identify if image has to be loaded politely.
@@ -679,7 +741,79 @@ var
 			 * Identify if image has to be resized, cropped and aligned.
 			 * @type {Boolean}
 			 */
-			resize: true
+			resize: true,
+
+			/**
+			 * Identify image upscale density.
+			 * @type {Object}
+			 */
+			ratio: {
+			
+                /**
+                 * Image upscale density.
+                 * @type {Number}
+                 */
+			    level: 2,
+			    
+                /**
+                 * Image upscale velocity.
+                 * @type {Number}
+                 */
+			    velocity: 0
+			
+			},
+
+			/**
+			 * Identify image quality.
+			 * @type {Object}
+			 */
+			quality: {
+			
+                /**
+                 * Image quality.
+                 * @type {Number}
+                 */
+			    level: 80,
+			    
+                /**
+                 * Image quality velocity.
+                 * @type {Number}
+                 */
+			    velocity: 0
+			
+			},
+
+			/**
+			 * Identify image processing parameters.
+			 * @type {Object}
+			 */
+			resize: {
+			
+                /**
+                 * Image cropping method ('none', 'select', 'canvas', 'holder').
+                 * @type {String}
+                 */
+			    method: "selection",
+			    
+                /**
+                 * Image extension in pixles.
+                 * @type {Number}
+                 */
+			    extend: 0
+			
+			},
+
+			/**
+			 * Identify image bluriness.
+			 * @type {Number}
+			 */
+			blur: 0,
+
+			/**
+			 * Identify image sharpness.
+			 * @type {Number}
+			 */
+			sharpen: 0
 
 		},
 
@@ -708,7 +842,7 @@ var
 	 * Create new Image layer.
 	 * @type {Text}
 	 */
-	layer = new tactic.layers.ImageLayer('IMAGE', data, function (event) {
+	layer = new tactic.layers.ImageLayer('IMG', data, function (event) {
 
 		// Look for event type.
 		switch (event.type) {
@@ -905,13 +1039,13 @@ var
 	});
 ```
 
-## API Utilities
+## Common Functions
 We provide a set of utilities that you are able to use to ease development of your banner.
 #### tactic.utils.watchFont(font : String, callback: Function, [timeout : Number]) : void
 Wait for font load.
 ``` css
 @font-face {
-	font-family: 'font_regular';
+	font-family: 'font_light';
 	src:         url('../assets/fonts/opensans-regular.eot');
 	src:         url('../assets/fonts/opensans-regular.eot?#iefix') format('embedded-opentype'),
 	             url('../assets/fonts/opensans-regular.woff2') format('woff2'),
@@ -921,12 +1055,12 @@ Wait for font load.
 	font-style:  normal;
 }
 
-*.font_regular {
-	font-family: 'font_regular', sans-serif;
+*.font_light {
+	font-family: 'font_light', sans-serif;
 }
 ```
 ``` js
-tactic.utils.watchFont('font_regular', function(font, success) {
+tactic.utils.watchFont('font_light', function(font, success) {
     // Check if load was successful.
     if (success) {
         // Output successful status to console.
@@ -942,7 +1076,7 @@ var
 	/**
 	 * @type {String}
 	 */
-    rawText = 'The quick {foxColor} fox jumps over the lazy dog.',
+    raw_text = 'The quick {foxColor} fox jumps overlay the lazy dog.',
 
 	/**
 	 * @type {Object}
@@ -950,9 +1084,16 @@ var
     macros = {
 
     	/**
-    	 * @type {String}
+    	 * @type {Object}
     	 */
-        foxColor: 'brown'
+        foxColor: {
+        
+            /**
+             * @type {String}
+             */
+            value: 'brown'
+            
+        }
 
     };
 
@@ -962,50 +1103,14 @@ var
 	 * Execute utility and replace raw text with available macros.
 	 * @type {String}
 	 */
-    replacedText = tactic.utils.replaceMacros(rawText, macros);
+    replaced_text = tactic.utils.replaceMacros(raw_text, macros);
 
-// Log updated text to console, will output 'The quick brown fox jumps over the lazy dog.'.
-console.log(replacedText);
+// Log updated text to console, will output 'The quick brown fox jumps overlay the lazy dog.'.
+console.log(replaced_text);
 ```
 
-## Technologies
-Boilerplate uses a number of open source projects and languages to work properly:
-- [HTML](https://www.w3schools.com/html/html_intro.asp) - creative markup.
-- [CSS](https://www.w3schools.com/css/) - creative styling and animation.
-- [JavaScript](https://www.javascript.com) - creative core and functionality.
-- [AngularJS](https://angularjs.org) - creative content editor.
-- [JSON](https://json.org) - creative data format.
-
-## Limitations
-The Boilerplate package limitations are as follows:
-- You are limited to use HTML, CSS and JavaScript languages only.
-- Scripts, styles, static assets and any other includes have to be stored within the package. You are not able to use external requests (except trtm.io domain).
-- Boilerplate package structure has to be described in "manifest.json".
-- Creative content editor has to be assembled in "editor.html".
-- Do not include "node_modules" and system files like ".DS_Store" or "Thumbs.db" into package when uploading creative to application.
-- Maximum package size is limited to 10MB.
-
-## To-dos
- - Make JSON schema
 
 ## Licence
 https://tacticrealtime.com/license/sdk/
 
-## Hints
-The main challenge of designing a template is fitting banner elements into all formats and saving their aspect ratio at the same time. By keeping creative simple, you are facilitating the accomplishment of a task.
-#### Save Production Time
-There are several practices of optimised banner production process. One of those lies in dividing all banner formats into several basic ones – square (480x400), tall (120x600), and wide (980x120). Use those sizes to do wire framing and layout of required banner elements. It will be much easier to design the rest of the formats when you have basic ones ready.
-#### Keep It Small
-The weight of the banner is one of the most important characteristics. The majority of advertisers require single banner size to be less than hundred kilobytes. To achieve this and increase banner load speed, avoid using special web fonts and try to go for HTML/CSS rendering instead of images.
-#### Text Asset Specifics
-Text is one of most problematic elements of the banner. Narrow formats have a lack of space for long words and it is barely possible to adjust those when text is dynamic. As a best practice, set maximum text length and use it in all formats, so it looks natural and easy to read. Please note that TACTIC™ offers automatic text adjustment feature that helps to fit text within marked area by reducing font size.
-#### Image Asset Specifics
-Huge amount of various banner formats creates several problems for pixel-perfect fitment of dynamic images. While designing a template, you have to keep in mind that TACTIC™ offers several features for image positioning and cropping. Every image can be cropped and aligned for square, portrait and landscape formats independently.
-#### Animation
-Animation becomes very sensitive case for mobile devices because of high CPU usage. Some advertisers have strict limitations which have to be analysed before designing a template. Avoiding unnecessary animation will help to fit most of advertiser guidelines and increase user experience.
-#### Frames
-It is possible to use frames for any banner element in the creative. Frames can be switched automatically, by interaction with user, or both. We offer ready-made solution for frame controls in the Boilerplate package example.
-
-For more information, see TACTIC™ [help page](https://help.tacticrealtime.com/) or contact [creative development team](https://tacticrealtime.com/?r=company-tallinn).
-
-Copyright (C) 2017 TACTIC™ Real-Time Marketing
+Copyright (c) 2025 TACTIC™ Real-Time Marketing
